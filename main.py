@@ -34,6 +34,15 @@ def main() -> int:
     if APP_ICON.exists():
         icon = QIcon(str(APP_ICON))
         app.setWindowIcon(icon)
+    else:
+        try:
+            from scripts.generate_icon import main as generate_app_icon
+
+            generate_app_icon()
+            if APP_ICON.exists():
+                app.setWindowIcon(QIcon(str(APP_ICON)))
+        except Exception:
+            pass
 
     # Prefer Segoe UI Variable / Inter-like system fonts on Windows
     font = QFont("Segoe UI", 10)

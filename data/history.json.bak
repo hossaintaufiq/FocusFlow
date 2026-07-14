@@ -2,6 +2,24 @@
   "version": 1,
   "entries": [
     {
+      "id": "hist_abd6c227ae6c",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T06:51:19Z"
+    },
+    {
+      "id": "hist_f5614e4e5cc6",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T06:49:15Z"
+    },
+    {
       "id": "hist_4d9329947a31",
       "action": "timer_stopped",
       "entity_type": "timer",

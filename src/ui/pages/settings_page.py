@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 
 from src.ui.pages.base_page import BasePage
 from src.utils.config import APP_NAME, APP_VERSION
+from src.utils.paths import PROJECT_ROOT
 from src.utils.theme import build_stylesheet
 from src.widgets.common import GlassCard, PageHeader
 from src.widgets.settings_widgets import SettingRow, SettingSectionHeader
@@ -184,6 +185,14 @@ class SettingsPage(BasePage):
         )
         self.auto_backup.toggled.connect(lambda _: self._apply())
         system.body.addWidget(self.auto_backup)
+
+        shortcut_row = QHBoxLayout()
+        shortcut_row.setSpacing(10)
+        shortcut_btn = QPushButton("Create desktop shortcut")
+        shortcut_btn.clicked.connect(self._create_desktop_shortcut)
+        shortcut_row.addWidget(shortcut_btn)
+        shortcut_row.addStretch()
+        system.body.addLayout(shortcut_row)
         self.layout_main.addWidget(system)
 
         # — Pomodoro —
@@ -354,6 +363,38 @@ class SettingsPage(BasePage):
         self.ctx.signals.toast.emit(
             "Startup enabled" if checked else "Startup disabled"
         )
+
+    def _create_desktop_shortcut(self) -> None:
+        import subprocess
+
+        ps1 = PROJECT_ROOT / "scripts" / "install_desktop_shortcut.ps1"
+        if not ps1.exists():
+            QMessageBox.warning(self, "Shortcut", "Install script not found.")
+            return
+        try:
+            subprocess.run(
+                [
+                    "powershell",
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-File",
+                    str(ps1),
+                ],
+                check=True,
+                creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+            )
+            self.ctx.signals.toast.emit("Desktop shortcut created")
+            QMessageBox.information(
+                self,
+                "Shortcut created",
+                "FocusFlow was added to your Desktop and Start Menu.\n"
+                "Double-click the FocusFlow icon to launch the app.",
+            )
+        except subprocess.CalledProcessError as exc:
+            QMessageBox.critical(
+                self, "Shortcut failed", f"Could not create shortcut:\n{exc}"
+            )
 
     def _backup_now(self) -> None:
         path = self.ctx.backup.create_backup("manual")

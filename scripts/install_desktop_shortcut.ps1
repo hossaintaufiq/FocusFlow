@@ -1,7 +1,7 @@
 # Creates Desktop + Start Menu shortcuts for FocusFlow (double-click to launch).
 param(
-    [switch]$Desktop = $true,
-    [switch]$StartMenu = $true
+    [bool]$CreateDesktop = $true,
+    [bool]$CreateStartMenu = $true
 )
 
 $ErrorActionPreference = "Stop"
@@ -10,11 +10,11 @@ $Launcher = Join-Path $ProjectRoot "FocusFlow.vbs"
 $Icon = Join-Path $ProjectRoot "assets\icons\focusflow.ico"
 
 if (-not (Test-Path $Launcher)) {
-    Write-Error "Launcher not found: $Launcher"
+    throw "Launcher not found: $Launcher"
 }
 
 if (-not (Test-Path $Icon)) {
-    Write-Host "Icon missing — generating..."
+    Write-Host "Icon missing - generating..."
     Push-Location $ProjectRoot
     python (Join-Path $PSScriptRoot "generate_icon.py")
     Pop-Location
@@ -22,29 +22,30 @@ if (-not (Test-Path $Icon)) {
 
 $Wsh = New-Object -ComObject WScript.Shell
 
-function New-FocusFlowShortcut($Path) {
-    $sc = $Wsh.CreateShortcut($Path)
+function Write-FocusFlowShortcut {
+    param([string]$ShortcutPath)
+    $sc = $Wsh.CreateShortcut($ShortcutPath)
     $sc.TargetPath = $Launcher
     $sc.WorkingDirectory = $ProjectRoot
     $sc.WindowStyle = 1
-    $sc.Description = "FocusFlow — Personal Productivity OS"
+    $sc.Description = "FocusFlow Personal Productivity OS"
     if (Test-Path $Icon) {
         $sc.IconLocation = "$Icon,0"
     }
     $sc.Save()
-    Write-Host "Created: $Path"
+    Write-Host "Created: $ShortcutPath"
 }
 
-if ($Desktop) {
-    $desktop = [Environment]::GetFolderPath("Desktop")
-    New-FocusFlowShortcut (Join-Path $desktop "FocusFlow.lnk")
+if ($CreateDesktop) {
+    $desktopPath = [Environment]::GetFolderPath("Desktop")
+    Write-FocusFlowShortcut -ShortcutPath (Join-Path $desktopPath "FocusFlow.lnk")
 }
 
-if ($StartMenu) {
-    $programs = [Environment]::GetFolderPath("Programs")
-    $folder = Join-Path $programs "FocusFlow"
+if ($CreateStartMenu) {
+    $programsPath = [Environment]::GetFolderPath("Programs")
+    $folder = Join-Path $programsPath "FocusFlow"
     New-Item -ItemType Directory -Force -Path $folder | Out-Null
-    New-FocusFlowShortcut (Join-Path $folder "FocusFlow.lnk")
+    Write-FocusFlowShortcut -ShortcutPath (Join-Path $folder "FocusFlow.lnk")
 }
 
 Write-Host ""
