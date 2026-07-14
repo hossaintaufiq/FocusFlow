@@ -55,13 +55,16 @@ class SettingsService:
     def _set_windows_startup(self, enabled: bool) -> None:
         import winreg
 
-        exe = sys.executable
-        launcher = PROJECT_ROOT / "FocusFlow.pyw"
-        script = str(launcher if launcher.exists() else PROJECT_ROOT / "main.py")
-        # Prefer launching via pythonw if available for no-console start
-        pythonw = Path(exe).with_name("pythonw.exe")
-        runner = str(pythonw) if pythonw.exists() else exe
-        command = f'"{runner}" "{script}"'
+        app_exe = PROJECT_ROOT / "FocusFlow.exe"
+        if app_exe.exists():
+            command = f'"{app_exe}"'
+        else:
+            launcher = PROJECT_ROOT / "FocusFlow.pyw"
+            script = str(launcher if launcher.exists() else PROJECT_ROOT / "main.py")
+            exe = sys.executable
+            pythonw = Path(exe).with_name("pythonw.exe")
+            runner = str(pythonw) if pythonw.exists() else exe
+            command = f'"{runner}" "{script}"'
 
         key = winreg.OpenKey(
             winreg.HKEY_CURRENT_USER,

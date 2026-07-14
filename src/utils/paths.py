@@ -4,10 +4,19 @@ Path helpers for FocusFlow. Resolves project root and data/asset locations.
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
-# FocusFlow/ (parent of src/)
-PROJECT_ROOT: Path = Path(__file__).resolve().parents[2]
+
+def _project_root() -> Path:
+    """Resolve app root for source checkout and frozen PyInstaller builds."""
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).resolve().parent
+    return Path(__file__).resolve().parents[2]
+
+
+# FocusFlow/ (parent of src/, or folder containing FocusFlow.exe)
+PROJECT_ROOT: Path = _project_root()
 
 DATA_DIR: Path = PROJECT_ROOT / "data"
 BACKUP_DIR: Path = DATA_DIR / "backups"

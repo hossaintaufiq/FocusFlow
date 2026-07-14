@@ -1,12 +1,13 @@
-' Silent Windows launcher — no console window. Use this as the shortcut target.
-Option Explicit
-
-Dim fso, shell, appDir, pythonw, cmd
-
+Set WshShell = CreateObject("WScript.Shell")
 Set fso = CreateObject("Scripting.FileSystemObject")
-Set shell = CreateObject("WScript.Shell")
 appDir = fso.GetParentFolderName(WScript.ScriptFullName)
-shell.CurrentDirectory = appDir
+WshShell.CurrentDirectory = appDir
+
+exe = appDir & "\FocusFlow.exe"
+If fso.FileExists(exe) Then
+    WshShell.Run """" & exe & """", 1, False
+    WScript.Quit 0
+End If
 
 pythonw = appDir & "\.venv\Scripts\pythonw.exe"
 If Not fso.FileExists(pythonw) Then
@@ -14,17 +15,14 @@ If Not fso.FileExists(pythonw) Then
 End If
 
 If pythonw <> "" Then
-    shell.Run """" & pythonw & """ """ & appDir & "\FocusFlow.pyw""", 0, False
+    WshShell.Run """" & pythonw & """ """ & appDir & "\FocusFlow.pyw""", 1, False
 Else
-    ' Hidden cmd fallback (still no visible console when launched via wscript)
-    cmd = "cmd /c """ & appDir & "\FocusFlow.cmd"""
-    shell.Run cmd, 0, False
+    WshShell.Run "cmd /c """ & appDir & "\FocusFlow.cmd""", 0, False
 End If
 
 Function FindOnPath(exeName)
-    Dim paths, p, candidate
     FindOnPath = ""
-    paths = Split(shell.ExpandEnvironmentStrings("%PATH%"), ";")
+    paths = Split(WshShell.ExpandEnvironmentStrings("%PATH%"), ";")
     For Each p In paths
         candidate = fso.BuildPath(p, exeName)
         If fso.FileExists(candidate) Then

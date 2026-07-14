@@ -389,7 +389,7 @@ FocusFlow behaves like a native Windows application:
 
 | Feature | Implementation |
 |---------|----------------|
-| **Double-click launch** | `FocusFlow.pyw` + Desktop shortcut via `FocusFlow.vbs` |
+| **Double-click launch** | Desktop `.lnk` shortcut (recommended) or `FocusFlow.pyw` |
 | **No console window** | `pythonw.exe` launcher |
 | **Taskbar icon** | `assets/icons/focusflow.ico` |
 | **Launch on startup** | Registry key under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` |
@@ -399,8 +399,10 @@ FocusFlow behaves like a native Windows application:
 ### How to Launch (End User)
 
 1. **Desktop shortcut** — double-click **FocusFlow** (recommended)  
-2. **Project folder** — double-click `FocusFlow.pyw`  
+2. **Project folder** — double-click `FocusFlow (Pin to taskbar).lnk`  
 3. **Developer mode** — `python main.py` from terminal  
+
+> **Taskbar tip:** Pin the **Desktop shortcut** or `FocusFlow (Pin to taskbar).lnk` — **not** `FocusFlow.pyw` directly. Pinning the `.pyw` file opens bare Python because Windows drops the script path.
 
 > **Note:** When you update code in `src/`, you do **not** need to update the `.pyw` launcher — it always runs the latest `main.py` and source tree.
 

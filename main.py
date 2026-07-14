@@ -22,7 +22,22 @@ from src.services.app_context import AppContext
 from src.ui.main_window import MainWindow
 
 
+def _set_windows_app_id() -> None:
+    """Give FocusFlow its own taskbar identity on Windows."""
+    if sys.platform != "win32":
+        return
+    try:
+        import ctypes
+
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(
+            "FocusFlow.ProductivityOS.1.0"
+        )
+    except Exception:
+        pass
+
+
 def main() -> int:
+    _set_windows_app_id()
     setup_logging()
     ensure_directories()
 
@@ -58,6 +73,8 @@ def main() -> int:
     context = AppContext.create()
     window = MainWindow(context)
     window.show()
+    window.raise_()
+    window.activateWindow()
 
     return app.exec()
 

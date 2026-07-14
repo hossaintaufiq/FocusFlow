@@ -2,6 +2,186 @@
   "version": 1,
   "entries": [
     {
+      "id": "hist_75379a5e714d",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:21:57Z"
+    },
+    {
+      "id": "hist_38fe33b0414f",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T07:21:51Z"
+    },
+    {
+      "id": "hist_b980ad4dea9c",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:21:43Z"
+    },
+    {
+      "id": "hist_fe641c169987",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T07:21:30Z"
+    },
+    {
+      "id": "hist_9917294538c9",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:21:20Z"
+    },
+    {
+      "id": "hist_e3170e88b1ef",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:20:13Z"
+    },
+    {
+      "id": "hist_ef479dafa02c",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T07:12:50Z"
+    },
+    {
+      "id": "hist_5161ccf3fab9",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:12:31Z"
+    },
+    {
+      "id": "hist_b74fe6deb0a5",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:10:28Z"
+    },
+    {
+      "id": "hist_006335cd4248",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:10:02Z"
+    },
+    {
+      "id": "hist_62cc21f24515",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:09:29Z"
+    },
+    {
+      "id": "hist_cebc1587dccc",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T07:09:07Z"
+    },
+    {
+      "id": "hist_ea4f02be4a9c",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:09:01Z"
+    },
+    {
+      "id": "hist_0ecc50657ae3",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T07:08:53Z"
+    },
+    {
+      "id": "hist_e272f3fa7ff2",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:08:51Z"
+    },
+    {
+      "id": "hist_271e88e068e5",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T07:08:40Z"
+    },
+    {
+      "id": "hist_cc5d53b6ddcb",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:08:33Z"
+    },
+    {
+      "id": "hist_bd9145375af6",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T07:04:10Z"
+    },
+    {
+      "id": "hist_8ee9ed490c27",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T07:04:00Z"
+    },
+    {
+      "id": "hist_9202a3f47fbb",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T06:51:59Z"
+    },
+    {
       "id": "hist_abd6c227ae6c",
       "action": "app_started",
       "entity_type": "system",
