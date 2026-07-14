@@ -70,6 +70,54 @@ class AppContext:
     def emit_change(self, kind: str = "all") -> None:
         self.signals.data_changed.emit(kind)
 
+    def active_task(self):
+        """Task currently linked to the Pomodoro timer, if any."""
+        tid = self.timers.active.task_id
+        return self.tasks.get(tid) if tid else None
+
+    def start_task_focus(self, task_id: str, *, navigate: bool = True) -> bool:
+        """
+        Start a Pomodoro slice for a task using its planned daily/total time.
+        Returns False if the task is missing or already completed.
+        """
+        task = self.tasks.get(task_id)
+        if not task or task.completed:
+            self.signals.toast.emit("Task not available for focus")
+            return False
+
+        seconds = task.pomodoro_session_seconds(self.settings.focus_minutes)
+        if task.status == "not_started":
+            self.tasks.update(task_id, status="in_progress")
+
+        self.timers.start_task_session(task_id, seconds)
+        label = task.planned_time_label()
+        self.signals.toast.emit(f"Focus started: {task.title}")
+        self.emit_change("timers")
+        if navigate:
+            self.signals.navigate.emit("pomodoro")
+        return True
+
+    def toggle_task_done(self, task_id: str | None = None) -> bool:
+        """Mark linked task complete/incomplete without stopping the timer."""
+        tid = task_id or self.timers.active.task_id
+        if not tid:
+            return False
+        task = self.tasks.get(tid)
+        if not task:
+            return False
+        was_done = task.completed
+        self.tasks.toggle_complete(tid)
+        if not was_done:
+            self.stats.record_task_completed(task.category)
+            self.achievements.on_task_completed(
+                self.stats.store.lifetime_tasks_completed
+            )
+        self.projects.refresh_counts()
+        self.emit_change("tasks")
+        msg = "Task marked done" if not was_done else "Task reopened"
+        self.signals.toast.emit(msg)
+        return True
+
     def daily_quote(self) -> str:
         if not self.settings.daily_quote_enabled:
             return ""
@@ -80,6 +128,9 @@ class AppContext:
 
     def manual_save(self) -> None:
         """Force-persist every store."""
+        flush = getattr(self, "_flush_focus_buffer", None)
+        if callable(flush):
+            flush()
         self.tasks.save()
         self.projects.save()
         self.habits.save()
@@ -94,6 +145,60 @@ class AppContext:
 
     def save_all(self) -> None:
         self.manual_save()
+
+    def reload_from_disk(self) -> None:
+        """Reload all service stores from JSON (e.g. after backup restore)."""
+        from src.models.achievements import AchievementsStore
+        from src.models.extras import ExtrasStore
+        from src.models.habit import HabitCollection
+        from src.models.history import HistoryCollection
+        from src.models.note import NoteCollection
+        from src.models.project import ProjectCollection
+        from src.models.settings import Settings
+        from src.models.stats import StatsStore
+        from src.models.task import TaskCollection
+        from src.models.timer import TimerStore
+
+        self.tasks._data = self.storage.load(
+            "tasks", TaskCollection.from_dict, TaskCollection
+        )
+        self.projects._data = self.storage.load(
+            "projects", ProjectCollection.from_dict, ProjectCollection
+        )
+        self.projects.set_task_service(self.tasks)
+        self.projects.refresh_counts()
+        self.habits._data = self.storage.load(
+            "habits", HabitCollection.from_dict, HabitCollection
+        )
+        self.habits.recalculate_streaks()
+        self.notes._data = self.storage.load(
+            "notes", NoteCollection.from_dict, NoteCollection
+        )
+        self.timers._data = self.storage.load(
+            "timers", TimerStore.from_dict, TimerStore
+        )
+        if self.timers._data.active_timer is None:
+            from src.models.timer import ActiveTimer
+
+            self.timers._data.active_timer = ActiveTimer()
+        self.stats._data = self.storage.load(
+            "stats", StatsStore.from_dict, StatsStore
+        )
+        self.extras._data = self.storage.load(
+            "extras", ExtrasStore.from_dict, ExtrasStore
+        )
+        self.achievements._data = self.storage.load(
+            "achievements", AchievementsStore.from_dict, AchievementsStore
+        )
+        self.history._data = self.storage.load(
+            "history", HistoryCollection.from_dict, HistoryCollection
+        )
+        self.settings_svc.settings = self.storage.load(
+            "settings", Settings.from_dict, Settings
+        )
+        self.notifications.enabled = self.settings.notifications_enabled
+        self.notifications.sound_enabled = self.settings.sound_enabled
+        self.emit_change("all")
 
     @classmethod
     def create(cls) -> "AppContext":
@@ -116,28 +221,69 @@ class AppContext:
             sound_enabled=settings_svc.settings.sound_enabled,
         )
 
+        focus_buffer = {"secs": 0, "task_id": ""}
+
+        def flush_focus_buffer() -> None:
+            if focus_buffer["secs"] <= 0:
+                return
+            # Stats already updated in-memory each second; just persist
+            stats.flush()
+            if focus_buffer["task_id"]:
+                tasks.save()
+            achievements.flush_focus_xp()
+            focus_buffer["secs"] = 0
+
         def on_focus_second(task_id: str, seconds: int) -> None:
-            stats.record_focus_seconds(seconds)
+            category = ""
+            project_id = ""
             if task_id:
-                tasks.add_time(task_id, seconds)
-            achievements.on_focus_seconds(stats.store.lifetime_focus_seconds, 0)
+                task = tasks.get(task_id)
+                if task:
+                    category = task.category
+                    project_id = task.project_id
+            stats.record_focus_seconds(
+                seconds, category=category, project_id=project_id, persist=False
+            )
+            if task_id:
+                tasks.add_time(task_id, seconds, persist=False)
+                focus_buffer["task_id"] = task_id
+            focus_buffer["secs"] += seconds
+            achievements.on_focus_seconds(stats.store.lifetime_focus_seconds, seconds)
+            # Flush dependent stores every 10 focus seconds
+            if focus_buffer["secs"] >= 10:
+                flush_focus_buffer()
 
         timers = TimerService(storage, history, on_focus_second=on_focus_second)
+        timers.last_completed_seconds = 0
+
+        signals = AppSignals()
 
         def on_timer_finished(kind: str) -> None:
-            if kind == "focus":
-                stats.record_pomodoro()
+            flush_focus_buffer()
+            elapsed = int(getattr(timers, "last_completed_seconds", 0) or 0)
+            if elapsed:
+                stats.set_longest_session(elapsed)
+            if kind in ("focus", "task", "custom"):
+                if kind == "focus":
+                    stats.record_pomodoro()
                 notifications.focus_complete()
                 pomodoros = sum(
-                    1 for s in timers.sessions if s.kind == "focus" and s.completed
+                    1
+                    for s in timers.sessions
+                    if s.kind in ("focus", "task") and s.completed
                 )
                 achievements.on_pomodoro(pomodoros)
+                if kind == "task" and timers.active.task_id:
+                    notifications.notify(
+                        "Focus slice done",
+                        "You can mark the task done or start another slice.",
+                    )
             elif kind in ("short_break", "long_break"):
                 notifications.break_reminder()
+            signals.data_changed.emit("timers")
 
         timers.finished.connect(on_timer_finished)
 
-        signals = AppSignals()
         ctx = cls(
             storage=storage,
             backup=backup,
@@ -154,6 +300,7 @@ class AppContext:
             notifications=notifications,
             signals=signals,
         )
+        ctx._flush_focus_buffer = flush_focus_buffer
 
         # Daily backup + history boot mark
         if settings_svc.settings.auto_backup:

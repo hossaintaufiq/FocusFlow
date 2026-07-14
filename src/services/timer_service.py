@@ -33,10 +33,12 @@ class TimerService(QObject):
         self._data = storage.load("timers", TimerStore.from_dict, TimerStore)
         if self._data.active_timer is None:
             self._data.active_timer = ActiveTimer()
+        self._dirty = False
+        self._ticks_since_save = 0
+        self._persist_every_n = 10  # write timers.json every N seconds while running
         self._qtimer = QTimer(self)
         self._qtimer.setInterval(1000)
         self._qtimer.timeout.connect(self._on_tick)
-        # Resume running timer after crash if marked running
         if self._data.active_timer.status == "running":
             self._qtimer.start()
 
@@ -51,6 +53,8 @@ class TimerService(QObject):
 
     def save(self) -> None:
         self._storage.save("timers", self._data)
+        self._dirty = False
+        self._ticks_since_save = 0
 
     def start(
         self,
@@ -60,8 +64,11 @@ class TimerService(QObject):
         task_id: str = "",
     ) -> ActiveTimer:
         active = self.active
+        if active.status in ("running", "paused") and active.elapsed_seconds > 0:
+            self.stop()
+        active = self.active
         active.kind = kind
-        active.task_id = task_id
+        active.task_id = task_id if kind == "task" else ""
         active.planned_seconds = planned_seconds
         active.elapsed_seconds = 0
         active.status = "running"
@@ -69,14 +76,35 @@ class TimerService(QObject):
         active.paused_at = ""
         self._qtimer.start()
         self.save()
+        summary = f"Started {kind} timer"
+        if task_id and kind == "task":
+            summary = f"Started task focus ({planned_seconds // 60} min slice)"
         self._history.log(
             "timer_started",
             entity_type="timer",
             entity_id=task_id,
-            summary=f"Started {kind} timer",
+            summary=summary,
         )
         self.state_changed.emit("running")
         return active
+
+    def start_task_session(
+        self,
+        task_id: str,
+        planned_seconds: int,
+    ) -> ActiveTimer:
+        """Start a Pomodoro focus slice bound to a task."""
+        return self.start(kind="task", planned_seconds=planned_seconds, task_id=task_id)
+
+    def restart_task_session(self, planned_seconds: int) -> ActiveTimer | None:
+        """Start another focus slice for the already-linked task."""
+        if not self.active.task_id:
+            return None
+        return self.start(
+            kind="task",
+            planned_seconds=planned_seconds,
+            task_id=self.active.task_id,
+        )
 
     def pause(self) -> ActiveTimer:
         active = self.active
@@ -129,13 +157,15 @@ class TimerService(QObject):
         self.state_changed.emit("idle")
         return session
 
-    def reset(self, persist_session: bool = True) -> None:
+    def reset(self, persist_session: bool = True, *, clear_task: bool = True) -> None:
         active = self.active
         active.status = "idle"
         active.elapsed_seconds = 0
         active.started_at = ""
         active.paused_at = ""
-        active.task_id = ""
+        if clear_task:
+            active.task_id = ""
+            active.kind = "focus"
         self._qtimer.stop()
         self.save()
         if persist_session:
@@ -159,7 +189,11 @@ class TimerService(QObject):
         if active.status != "running":
             return
         active.elapsed_seconds += 1
-        self.save()  # persist every second as required
+        self._dirty = True
+        self._ticks_since_save += 1
+        # Persist periodically (and always on pause/stop/complete)
+        if self._ticks_since_save >= self._persist_every_n:
+            self.save()
         self.tick.emit(active.elapsed_seconds)
         if self._on_focus_second and active.kind in ("focus", "task", "custom"):
             self._on_focus_second(active.task_id, 1)
@@ -180,20 +214,27 @@ class TimerService(QObject):
         )
         self._data.sessions.insert(0, session)
         kind = active.kind
-        if kind == "focus":
+        elapsed = active.elapsed_seconds
+        task_id = active.task_id
+        if kind in ("focus", "task"):
             active.pomodoro_count += 1
             self._history.log(
                 "pomodoro_completed",
                 entity_type="timer",
-                summary="Pomodoro completed",
+                entity_id=task_id,
+                summary="Task focus slice done" if kind == "task" else "Pomodoro completed",
             )
         self._qtimer.stop()
         active.status = "idle"
         active.elapsed_seconds = 0
         active.started_at = ""
+        # Keep task linked after a slice so user can mark done or start another slice
+        if kind != "task":
+            active.task_id = ""
         self.save()
         self.state_changed.emit("idle")
         self.finished.emit(kind)
+        self.last_completed_seconds = elapsed
 
     def focus_totals(self) -> dict[str, int]:
         """Return focus seconds: today, week, month, lifetime."""

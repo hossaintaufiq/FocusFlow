@@ -12,6 +12,8 @@ class BasePage(QWidget):
     """Scrollable page with a content column."""
 
     page_id: str = ""
+    # Kinds that should trigger refresh for this page ("all" always matches)
+    watch_kinds: tuple[str, ...] = ("all",)
 
     def __init__(self, context: AppContext, parent=None) -> None:
         super().__init__(parent)
@@ -42,6 +44,27 @@ class BasePage(QWidget):
         """Override to reload data into widgets."""
 
     def _on_data(self, kind: str) -> None:
+        # Only refresh the visible page, and only for relevant change kinds
+        if not self.isVisible():
+            return
+        if kind not in ("all", *self.watch_kinds) and self.page_id not in (kind,):
+            # Also refresh when kind matches domain of this page
+            related = {
+                "dashboard": ("tasks", "timers", "habits", "stats", "history"),
+                "today": ("tasks",),
+                "projects": ("projects", "tasks"),
+                "habits": ("habits",),
+                "calendar": ("tasks",),
+                "pomodoro": ("timers",),
+                "notes": ("notes",),
+                "statistics": ("stats", "timers", "tasks", "habits"),
+                "history": ("history", "tasks", "timers", "habits"),
+                "extras": ("extras",),
+                "settings": ("settings",),
+            }
+            allowed = related.get(self.page_id, ())
+            if kind not in allowed and kind != "all":
+                return
         self.refresh()
 
     def on_show(self) -> None:

@@ -212,7 +212,7 @@ class TaskDialog(QDialog):
             daily_label = f"{dh}h/day" if not dm else (f"{dh}h {dm}m/day" if dh else f"{dm}m/day")
             total_label = f"{th}h" if not tm else f"{th}h {tm}m"
             self.estimate_preview.setText(
-                f"Plan: {duration} · {daily_label}  →  about {total_label} total work"
+                f"Plan: {duration} · {daily_label}  ->  about {total_label} total work"
             )
         elif daily:
             daily_label = f"{dh}h/day" if not dm else (f"{dh}h {dm}m/day" if dh else f"{dm}m/day")

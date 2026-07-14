@@ -152,13 +152,14 @@ class TaskService:
         )
         return task
 
-    def add_time(self, task_id: str, seconds: int) -> Task | None:
+    def add_time(self, task_id: str, seconds: int, *, persist: bool = True) -> Task | None:
         task = self.get(task_id)
         if not task:
             return None
         task.actual_seconds = max(0, task.actual_seconds + seconds)
         task.touch()
-        self.save()
+        if persist:
+            self.save()
         return task
 
     def today(self, include_archived: bool = False) -> list[Task]:

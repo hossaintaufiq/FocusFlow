@@ -2,6 +2,168 @@
   "version": 1,
   "entries": [
     {
+      "id": "hist_30e69ef4670f",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "task_ab714b1af631",
+      "summary": "Started task timer",
+      "details": {},
+      "timestamp": "2026-07-14T06:33:35Z"
+    },
+    {
+      "id": "hist_cf628fa518be",
+      "action": "timer_resumed",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Resumed timer",
+      "details": {},
+      "timestamp": "2026-07-14T06:33:26Z"
+    },
+    {
+      "id": "hist_7506a22b3f42",
+      "action": "timer_paused",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Paused timer",
+      "details": {},
+      "timestamp": "2026-07-14T06:33:25Z"
+    },
+    {
+      "id": "hist_cddf290d6c53",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started long_break timer",
+      "details": {},
+      "timestamp": "2026-07-14T06:33:23Z"
+    },
+    {
+      "id": "hist_05e8bdbb58ec",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started short_break timer",
+      "details": {},
+      "timestamp": "2026-07-14T06:33:20Z"
+    },
+    {
+      "id": "hist_d9ae47d2821e",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started focus timer",
+      "details": {},
+      "timestamp": "2026-07-14T06:33:16Z"
+    },
+    {
+      "id": "hist_bb3ef870e418",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "task_c3de4ec37296",
+      "summary": "Stopped task (12s)",
+      "details": {},
+      "timestamp": "2026-07-14T06:33:15Z"
+    },
+    {
+      "id": "hist_d61a6f35711f",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "task_c3de4ec37296",
+      "summary": "Started task timer",
+      "details": {},
+      "timestamp": "2026-07-14T06:33:02Z"
+    },
+    {
+      "id": "hist_12e3b9e5c377",
+      "action": "task_deleted",
+      "entity_type": "task",
+      "entity_id": "task_16f33fb34291",
+      "summary": "Deleted task: ML-Algo (copy)",
+      "details": {},
+      "timestamp": "2026-07-14T06:28:57Z"
+    },
+    {
+      "id": "hist_7187f9a93bb3",
+      "action": "task_completed",
+      "entity_type": "task",
+      "entity_id": "task_16f33fb34291",
+      "summary": "Completed: ML-Algo (copy)",
+      "details": {},
+      "timestamp": "2026-07-14T06:28:52Z"
+    },
+    {
+      "id": "hist_46f3386a6572",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "task_16f33fb34291",
+      "summary": "Stopped task (6s)",
+      "details": {},
+      "timestamp": "2026-07-14T06:28:37Z"
+    },
+    {
+      "id": "hist_6a3d40190e06",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "task_16f33fb34291",
+      "summary": "Started task timer",
+      "details": {},
+      "timestamp": "2026-07-14T06:28:31Z"
+    },
+    {
+      "id": "hist_8832ac19c37c",
+      "action": "task_duplicated",
+      "entity_type": "task",
+      "entity_id": "task_16f33fb34291",
+      "summary": "Duplicated task: ML-Algo (copy)",
+      "details": {},
+      "timestamp": "2026-07-14T06:28:20Z"
+    },
+    {
+      "id": "hist_514bdd3c6be0",
+      "action": "task_archived",
+      "entity_type": "task",
+      "entity_id": "task_4a59835aa10e",
+      "summary": "Archived task: Company Structure",
+      "details": {},
+      "timestamp": "2026-07-14T06:28:18Z"
+    },
+    {
+      "id": "hist_a85735e9469a",
+      "action": "task_edited",
+      "entity_type": "task",
+      "entity_id": "task_4a59835aa10e",
+      "summary": "Edited task: Company Structure",
+      "details": {},
+      "timestamp": "2026-07-14T06:28:18Z"
+    },
+    {
+      "id": "hist_5a66b7089e9b",
+      "action": "habit_completed",
+      "entity_type": "habit",
+      "entity_id": "habit_2423f6bb3c17",
+      "summary": "Completed habit: Deep work",
+      "details": {},
+      "timestamp": "2026-07-14T06:27:50Z"
+    },
+    {
+      "id": "hist_f15d2812c670",
+      "action": "habit_completed",
+      "entity_type": "habit",
+      "entity_id": "habit_6430f9d8fd73",
+      "summary": "Completed habit: Drink water",
+      "details": {},
+      "timestamp": "2026-07-14T06:27:49Z"
+    },
+    {
+      "id": "hist_e24176407ab9",
+      "action": "task_created",
+      "entity_type": "task",
+      "entity_id": "task_4a59835aa10e",
+      "summary": "Created task: Company Structure",
+      "details": {},
+      "timestamp": "2026-07-14T06:27:31Z"
+    },
+    {
       "id": "hist_294aa9497478",
       "action": "task_created",
       "entity_type": "task",

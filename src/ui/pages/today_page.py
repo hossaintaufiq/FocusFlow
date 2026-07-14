@@ -170,14 +170,7 @@ class TodayPage(BasePage):
             self.ctx.emit_change("tasks")
 
     def _timer(self, task_id: str) -> None:
-        mins = self.ctx.settings.focus_minutes
-        # Prefer today's daily dedication as timer length when set
-        task = self.ctx.tasks.get(task_id)
-        if task and task.daily_minutes_total > 0:
-            mins = min(task.daily_minutes_total, 180)
-        self.ctx.timers.start(kind="task", planned_seconds=mins * 60, task_id=task_id)
-        self.ctx.signals.navigate.emit("pomodoro")
-        self.ctx.emit_change("timers")
+        self.ctx.start_task_focus(task_id, navigate=True)
 
     def _dup(self) -> None:
         tid = self._require_selection()

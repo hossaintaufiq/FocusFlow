@@ -67,7 +67,9 @@ class StatisticsPage(BasePage):
         return card
 
     def refresh(self) -> None:
-        days = self.range.currentData() or 7
+        days = int(self.range.currentData() or 7)
+        # Cap chart points for readability but allow true longer windows up to 90
+        chart_days = min(days, 90) if days >= 365 else days
         summary = self.ctx.stats.summary()
         self.chip_score.set_value(str(int(summary["productivity_score"])))
         self.chip_focus.set_value(format_duration(summary["focus_seconds_today"]))
@@ -75,14 +77,12 @@ class StatisticsPage(BasePage):
         self.chip_avg.set_value(format_duration(int(summary["average_focus_today"])))
         self.chip_long.set_value(format_duration(int(summary["longest_session_seconds"])))
 
-        labels, tasks = self.ctx.stats.series("tasks_completed", days if days <= 30 else 30)
-        _, focus = self.ctx.stats.series("focus_hours", days if days <= 30 else 30)
-        _, scores = self.ctx.stats.series("productivity_score", days if days <= 30 else 30)
+        labels, tasks = self.ctx.stats.series("tasks_completed", chart_days)
+        _, focus = self.ctx.stats.series("focus_hours", chart_days)
+        _, scores = self.ctx.stats.series("productivity_score", chart_days)
 
-        if days >= 365:
-            self.line_chart.plot_line(labels, tasks, "Year view (last 30 sample days)")
-        else:
-            self.line_chart.plot_line(labels, tasks)
+        title_suffix = " (last 90 days sample)" if days >= 365 else ""
+        self.line_chart.plot_line(labels, tasks, f"Tasks{title_suffix}")
         self.bar_chart.plot_bar(labels, focus)
         self.score_chart.plot_line(labels, scores)
 

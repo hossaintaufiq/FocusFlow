@@ -178,9 +178,22 @@ class DashboardPage(BasePage):
 
     def _refresh_timer(self) -> None:
         active = self.ctx.timers.active
-        if active.status == "idle":
+        task = self.ctx.active_task()
+        if active.status == "idle" and not task:
             self.active_timer_label.setText("Idle")
             self.active_timer_meta.setText("No timer running")
+        elif task:
+            rem_slice = self.ctx.timers.remaining_seconds()
+            if active.status == "idle":
+                rem_slice = task.pomodoro_session_seconds(self.ctx.settings.focus_minutes)
+            live = active.elapsed_seconds if active.status in ("running", "paused") else 0
+            rem_task = task.remaining_budget_seconds(live)
+            self.active_timer_label.setText(format_clock(rem_slice))
+            lines = [f"{task.title} · slice {format_clock(rem_slice)}"]
+            if task.has_time_budget():
+                lines.append(f"Task left: {format_clock(rem_task)}")
+            lines.append(f"{active.kind} · {active.status}")
+            self.active_timer_meta.setText(" · ".join(lines))
         else:
             rem = self.ctx.timers.remaining_seconds()
             self.active_timer_label.setText(format_clock(rem))
@@ -253,7 +266,4 @@ class DashboardPage(BasePage):
             self.ctx.emit_change("tasks")
 
     def _start_task_timer(self, task_id: str) -> None:
-        mins = self.ctx.settings.focus_minutes
-        self.ctx.timers.start(kind="task", planned_seconds=mins * 60, task_id=task_id)
-        self.ctx.emit_change("timers")
-        self.ctx.signals.toast.emit("Timer started")
+        self.ctx.start_task_focus(task_id, navigate=True)

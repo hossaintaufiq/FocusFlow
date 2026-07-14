@@ -86,9 +86,9 @@ class TaskRow(QFrame):
         edit_btn.clicked.connect(lambda: self.open_requested.emit(task.id))
         root.addWidget(edit_btn)
 
-        timer_btn = QPushButton("▶")
-        timer_btn.setFixedSize(32, 32)
-        timer_btn.setToolTip("Start timer")
+        timer_btn = QPushButton("Focus")
+        timer_btn.setFixedHeight(32)
+        timer_btn.setToolTip("Start Pomodoro for this task")
         timer_btn.setStyleSheet(
             f"QPushButton {{ background: {theme.accent_dim}; color: {theme.accent}; "
             f"border: none; border-radius: 8px; font-weight: 700; }}"

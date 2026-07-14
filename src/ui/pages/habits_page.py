@@ -102,7 +102,8 @@ class HabitsPage(BasePage):
             cell.setToolTip(f"{day}: {count}")
             self.heat_grid.addWidget(cell, i // 14, i % 14)
 
-        # push habit stats
+    def _sync_habit_stats(self) -> None:
+        cur, longest = self.ctx.habits.best_streaks()
         self.ctx.stats.record_habit(
             sum(1 for h in self.ctx.habits.habits if h.is_completed_on()),
             len(self.ctx.habits.habits),
@@ -126,9 +127,11 @@ class HabitsPage(BasePage):
             self.ctx.achievements.on_habit_completed()
             cur, _ = self.ctx.habits.best_streaks()
             self.ctx.achievements.on_streak(cur)
+        self._sync_habit_stats()
         self.ctx.emit_change("habits")
 
     def _delete(self, habit_id: str) -> None:
         if QMessageBox.question(self, "Delete", "Delete habit?") == QMessageBox.StandardButton.Yes:
             self.ctx.habits.delete(habit_id)
+            self._sync_habit_stats()
             self.ctx.emit_change("habits")

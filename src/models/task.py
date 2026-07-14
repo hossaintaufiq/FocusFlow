@@ -96,6 +96,54 @@ class Task(JsonMixin):
     def daily_minutes_total(self) -> int:
         return max(0, self.daily_hours * 60 + self.daily_mins)
 
+    def pomodoro_session_seconds(self, default_focus_minutes: int = 25) -> int:
+        """
+        Length of one Pomodoro slice for this task.
+
+        Uses daily commitment first (e.g. 3h/day), else total estimate, else app default.
+        """
+        if self.daily_minutes_total > 0:
+            return self.daily_minutes_total * 60
+        self.sync_estimated_minutes()
+        if self.estimated_minutes > 0:
+            return self.estimated_minutes * 60
+        return max(60, default_focus_minutes * 60)
+
+    def budget_seconds(self) -> int:
+        """Total planned work time for this task (all days combined)."""
+        self.sync_estimated_minutes()
+        return max(0, self.estimated_minutes * 60)
+
+    def remaining_budget_seconds(
+        self, extra_elapsed: int = 0, include_active_session: bool = False
+    ) -> int:
+        """Time left on the task budget (planned minus logged, optionally plus live session)."""
+        spent = self.actual_seconds + max(0, extra_elapsed)
+        return max(0, self.budget_seconds() - spent)
+
+    def has_time_budget(self) -> bool:
+        self.sync_estimated_minutes()
+        return self.budget_seconds() > 0
+
+    def planned_time_label(self) -> str:
+        """What you decided to give this task."""
+        self.ensure_estimate_fields()
+        if self.estimate_days and self.daily_minutes_total:
+            total = self.budget_seconds()
+            th, tm = divmod(total // 60, 60)
+            total_s = f"{th}h {tm}m" if tm else f"{th}h"
+            dh, dm = divmod(self.daily_minutes_total, 60)
+            daily_s = f"{dh}h/day" if not dm else (f"{dh}h {dm}m/day" if dh else f"{dm}m/day")
+            return f"{self.estimate_days} days x {daily_s} ({total_s} total)"
+        if self.estimated_minutes:
+            th, tm = divmod(self.estimated_minutes, 60)
+            if th and tm:
+                return f"{th}h {tm}m planned"
+            if th:
+                return f"{th}h planned"
+            return f"{tm}m planned"
+        return "No time budget set"
+
     def estimate_summary(self) -> str:
         """Human-readable estimate, e.g. ``7d · 3h/day ≈ 21h``."""
         self.ensure_estimate_fields()
@@ -123,7 +171,7 @@ class Task(JsonMixin):
             total = self.estimate_days * daily + self.estimate_hours * 60 + self.estimate_mins
             th, tm = divmod(total, 60)
             total_bit = f"{th}h" if not tm else f"{th}h {tm}m"
-            return f"{duration} · {daily_bit} ≈ {total_bit}"
+            return f"{duration} · {daily_bit} ~ {total_bit}"
         if duration and daily_bit:
             return f"{duration} · {daily_bit}"
         if duration:

@@ -33,15 +33,30 @@ class AchievementService:
         return unlocked
 
     def on_focus_seconds(self, lifetime_seconds: int, session_seconds: int = 0) -> list[str]:
+        """Award 1 XP per full focus minute; check lifetime badges."""
         unlocked: list[str] = []
+        if not hasattr(self, "_pending_focus_secs"):
+            self._pending_focus_secs = 0
         if session_seconds:
-            self._data.award_focus_minutes(session_seconds // 60)
+            self._pending_focus_secs += session_seconds
+            awarded = False
+            while self._pending_focus_secs >= 60:
+                self._data.award_focus_minutes(1)
+                self._pending_focus_secs -= 60
+                awarded = True
+            if awarded:
+                self.save()
         if lifetime_seconds >= 3600 and self._data.unlock_badge("focus_1h"):
             unlocked.append("focus_1h")
+            self.save()
         if lifetime_seconds >= 36000 and self._data.unlock_badge("focus_10h"):
             unlocked.append("focus_10h")
-        self.save()
+            self.save()
         return unlocked
+
+    def flush_focus_xp(self) -> None:
+        """Persist any pending partial focus second bucket state."""
+        self.save()
 
     def on_habit_completed(self) -> None:
         self._data.award_habit_xp()

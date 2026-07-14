@@ -3,17 +3,18 @@
   "daily": {
     "2026-07-14": {
       "date": "2026-07-14",
-      "tasks_completed": 2,
-      "tasks_created": 3,
-      "focus_seconds": 3,
+      "tasks_completed": 3,
+      "tasks_created": 4,
+      "focus_seconds": 93,
       "pomodoro_count": 0,
-      "habits_completed": 0,
+      "habits_completed": 2,
       "habits_total": 2,
-      "productivity_score": 16.0,
+      "productivity_score": 45.9,
       "longest_session_seconds": 0,
       "category_minutes": {
         "getting-started": 0,
-        "focus": 0
+        "focus": 0,
+        "general": 0
       },
       "project_minutes": {}
     }
@@ -21,11 +22,11 @@
   "weekly": {},
   "monthly": {},
   "yearly": {},
-  "lifetime_focus_seconds": 3,
-  "lifetime_tasks_completed": 2,
+  "lifetime_focus_seconds": 93,
+  "lifetime_tasks_completed": 3,
   "productivity_scores": {
-    "2026-07-14": 16.0
+    "2026-07-14": 45.9
   },
-  "current_streak": 0,
-  "longest_streak": 0
+  "current_streak": 1,
+  "longest_streak": 1
 }

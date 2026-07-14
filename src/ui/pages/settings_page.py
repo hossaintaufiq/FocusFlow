@@ -201,21 +201,33 @@ class SettingsPage(BasePage):
         if not backups:
             QMessageBox.information(self, "Restore", "No backups found.")
             return
-        latest = backups[0]
+        names = [b.name for b in backups]
+        from PySide6.QtWidgets import QInputDialog
+
+        choice, ok = QInputDialog.getItem(
+            self, "Restore Backup", "Choose a backup:", names, 0, False
+        )
+        if not ok or not choice:
+            return
+        target = next(b for b in backups if b.name == choice)
         if (
             QMessageBox.question(
                 self,
                 "Restore",
-                f"Restore from {latest.name}? Current data will be overwritten.",
+                f"Restore from {target.name}? Current data will be overwritten.",
             )
             == QMessageBox.StandardButton.Yes
         ):
-            self.ctx.backup.restore_backup(latest)
+            self.ctx.backup.create_backup("pre-restore")
+            self.ctx.backup.restore_backup(target)
+            self.ctx.reload_from_disk()
             self.ctx.history.log(
                 "backup_restored",
                 entity_type="system",
-                summary=f"Restored {latest.name}",
+                summary=f"Restored {target.name}",
             )
+            self.ctx.signals.toast.emit(f"Restored {target.name}")
             QMessageBox.information(
-                self, "Restore", "Restore complete. Please restart FocusFlow."
+                self, "Restore", "Restore complete. Data reloaded."
             )
+            self.refresh()

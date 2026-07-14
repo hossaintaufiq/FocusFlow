@@ -3,13 +3,19 @@
 from __future__ import annotations
 
 import logging
+import re
 import sys
-from pathlib import Path
 
 from src.utils.config import APP_NAME
 from src.utils.paths import SOUNDS_DIR
 
 logger = logging.getLogger("FocusFlow.notify")
+
+
+def _ps_escape(value: str) -> str:
+    """Escape a string for safe inclusion in a PowerShell double-quoted literal."""
+    cleaned = re.sub(r"[\r\n\t]+", " ", value)
+    return cleaned.replace("`", "``").replace('"', '`"').replace("$", "`$")
 
 
 class NotificationService:
@@ -37,17 +43,18 @@ class NotificationService:
         if sys.platform != "win32":
             return
         try:
-            # Lightweight balloon via PowerShell (no extra deps)
             import subprocess
 
+            safe_title = _ps_escape(f"{APP_NAME}: {title}")[:120]
+            safe_message = _ps_escape(message)[:240]
             ps = (
-                f'[void][Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms");'
-                f"$n = New-Object System.Windows.Forms.NotifyIcon;"
-                f"$n.Icon = [System.Drawing.SystemIcons]::Information;"
-                f"$n.Visible = $true;"
-                f'$n.ShowBalloonTip(4000, "{APP_NAME}: {title}", "{message}", '
-                f"[System.Windows.Forms.ToolTipIcon]::Info);"
-                f"Start-Sleep -Seconds 5; $n.Dispose()"
+                '[void][Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms");'
+                "$n = New-Object System.Windows.Forms.NotifyIcon;"
+                "$n.Icon = [System.Drawing.SystemIcons]::Information;"
+                "$n.Visible = $true;"
+                f'$n.ShowBalloonTip(4000, "{safe_title}", "{safe_message}", '
+                "[System.Windows.Forms.ToolTipIcon]::Info);"
+                "Start-Sleep -Seconds 5; $n.Dispose()"
             )
             subprocess.Popen(
                 ["powershell", "-NoProfile", "-Command", ps],
@@ -62,7 +69,6 @@ class NotificationService:
             return
         path = SOUNDS_DIR / f"{name}.wav"
         if not path.exists():
-            # Generate a tiny system beep on Windows
             if sys.platform == "win32":
                 try:
                     import winsound

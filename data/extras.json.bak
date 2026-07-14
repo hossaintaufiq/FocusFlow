@@ -2,14 +2,31 @@
   "version": 1,
   "journal": [],
   "mood": [],
-  "water": {},
+  "water": {
+    "2026-07-14": {
+      "date": "2026-07-14",
+      "ml": 0,
+      "goal_ml": 2500
+    }
+  },
   "workout": [],
   "reading": [],
   "coding": [],
   "leetcode": [],
   "github": [],
   "study": [],
-  "prayer": {},
+  "prayer": {
+    "2026-07-14": {
+      "date": "2026-07-14",
+      "items": {
+        "fajr": true,
+        "dhuhr": true,
+        "asr": true,
+        "maghrib": true,
+        "isha": true
+      }
+    }
+  },
   "finance": [],
   "scratchpad": "",
   "sticky_notes": [],

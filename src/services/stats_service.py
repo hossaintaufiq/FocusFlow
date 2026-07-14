@@ -39,18 +39,26 @@ class StatsService:
         d.tasks_created += 1
         self.save()
 
-    def record_focus_seconds(self, seconds: int, category: str = "", project_id: str = "") -> None:
+    def record_focus_seconds(
+        self,
+        seconds: int,
+        category: str = "",
+        project_id: str = "",
+        *,
+        persist: bool = True,
+    ) -> None:
         d = self.day()
         d.focus_seconds += seconds
         self._data.lifetime_focus_seconds += seconds
-        if seconds > d.longest_session_seconds:
-            # approximate — full session length tracked elsewhere
-            pass
         if category:
             d.category_minutes[category] = d.category_minutes.get(category, 0) + seconds / 60.0
         if project_id:
             d.project_minutes[project_id] = d.project_minutes.get(project_id, 0) + seconds / 60.0
         self._recompute_score(d)
+        if persist:
+            self.save()
+
+    def flush(self) -> None:
         self.save()
 
     def record_pomodoro(self) -> None:
@@ -67,7 +75,7 @@ class StatsService:
 
     def set_longest_session(self, seconds: int) -> None:
         d = self.day()
-        d.longest_session_seconds = max(d.longest_session_seconds, seconds)
+        d.longest_session_seconds = max(d.longest_session_seconds, int(seconds))
         self.save()
 
     def update_streaks(self, current: int, longest: int) -> None:
