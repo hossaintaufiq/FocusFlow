@@ -10,7 +10,7 @@ from typing import Any
 from src.models.settings import Settings
 from src.services.storage import JsonStorage
 from src.utils.config import APP_NAME, ThemeColors
-from src.utils.paths import PROJECT_ROOT
+from src.utils.paths import APP_ICON, PROJECT_ROOT
 
 logger = logging.getLogger("FocusFlow.settings")
 
@@ -56,7 +56,8 @@ class SettingsService:
         import winreg
 
         exe = sys.executable
-        script = str(PROJECT_ROOT / "main.py")
+        launcher = PROJECT_ROOT / "FocusFlow.pyw"
+        script = str(launcher if launcher.exists() else PROJECT_ROOT / "main.py")
         # Prefer launching via pythonw if available for no-console start
         pythonw = Path(exe).with_name("pythonw.exe")
         runner = str(pythonw) if pythonw.exists() else exe

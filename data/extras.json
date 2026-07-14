@@ -1,15 +1,32 @@
 {
   "version": 1,
   "journal": [],
-  "mood": [],
+  "mood": [
+    {
+      "id": "mood_f1bdc39ebc2a",
+      "date": "2026-07-14",
+      "score": 3,
+      "note": "",
+      "created_at": "2026-07-14T06:36:46Z"
+    }
+  ],
   "water": {
     "2026-07-14": {
       "date": "2026-07-14",
-      "ml": 0,
-      "goal_ml": 2500
+      "ml": 250,
+      "goal_ml": 2477
     }
   },
-  "workout": [],
+  "workout": [
+    {
+      "id": "workout_8a2c73c5add9",
+      "date": "2026-07-14",
+      "activity": "25",
+      "duration_minutes": 30,
+      "notes": "",
+      "created_at": "2026-07-14T06:36:55Z"
+    }
+  ],
   "reading": [],
   "coding": [
     {
@@ -29,16 +46,27 @@
     "2026-07-14": {
       "date": "2026-07-14",
       "items": {
-        "fajr": true,
-        "dhuhr": true,
-        "asr": true,
-        "maghrib": true,
-        "isha": true
+        "fajr": false,
+        "dhuhr": false,
+        "asr": false,
+        "maghrib": false,
+        "isha": false
       }
     }
   },
   "finance": [],
   "scratchpad": "",
-  "sticky_notes": [],
+  "sticky_notes": [
+    {
+      "id": "sticky_57c49ed96fdb",
+      "content": "ml",
+      "color": "#FBBF24",
+      "x": 40,
+      "y": 40,
+      "pinned": false,
+      "created_at": "2026-07-14T06:37:05Z",
+      "updated_at": "2026-07-14T06:37:05Z"
+    }
+  ],
   "countdowns": []
 }

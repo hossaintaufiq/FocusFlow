@@ -2,7 +2,6 @@
 
 from src.ui.pages.calendar_page import CalendarPage
 from src.ui.pages.dashboard_page import DashboardPage
-from src.ui.pages.extras_page import ExtrasPage
 from src.ui.pages.habits_page import HabitsPage
 from src.ui.pages.history_page import HistoryPage
 from src.ui.pages.notes_page import NotesPage
@@ -22,6 +21,5 @@ __all__ = [
     "NotesPage",
     "StatisticsPage",
     "HistoryPage",
-    "ExtrasPage",
     "SettingsPage",
 ]

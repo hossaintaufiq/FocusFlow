@@ -53,7 +53,7 @@ class BasePage(QWidget):
                 "dashboard": ("tasks", "timers", "habits", "stats", "history"),
                 "today": ("tasks",),
                 "projects": ("projects", "tasks"),
-                "habits": ("habits",),
+                "habits": ("habits", "extras"),
                 "calendar": ("tasks",),
                 "pomodoro": ("timers",),
                 "notes": ("notes",),

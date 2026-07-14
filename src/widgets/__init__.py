@@ -8,10 +8,10 @@ from src.widgets.common import (
     PageHeader,
     ProgressRing,
     SidebarButton,
+    SidebarSectionLabel,
     StatChip,
 )
-from src.widgets.task_dialog import TaskDialog
-from src.widgets.task_widgets import TaskList, TaskRow
+from src.widgets.settings_widgets import SettingRow, SettingToggle
 
 __all__ = [
     "ChartWidget",
@@ -21,6 +21,9 @@ __all__ = [
     "PageHeader",
     "ProgressRing",
     "SidebarButton",
+    "SidebarSectionLabel",
+    "SettingRow",
+    "SettingToggle",
     "StatChip",
     "TaskDialog",
     "TaskList",

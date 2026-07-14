@@ -1,14 +1,17 @@
-"""Today's tasks page with search, filters, and multi-actions."""
+"""Today's tasks page with clear selection and professional task list."""
 
 from __future__ import annotations
 
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QComboBox,
+    QFrame,
     QHBoxLayout,
     QLabel,
     QLineEdit,
     QMessageBox,
     QPushButton,
+    QVBoxLayout,
 )
 
 from src.ui.pages.base_page import BasePage
@@ -22,7 +25,11 @@ class TodayPage(BasePage):
 
     def build(self) -> None:
         self.layout_main.addWidget(
-            PageHeader("Today's Tasks", "Capture, filter, and ship.", self.theme)
+            PageHeader(
+                "Today's Tasks",
+                "Click a task to select it — then Edit, Delete, Archive, or Focus.",
+                self.theme,
+            )
         )
         self._selected: str | None = None
 
@@ -30,6 +37,7 @@ class TodayPage(BasePage):
         self.search = QLineEdit()
         self.search.setPlaceholderText("Search title, tags, category…  (Ctrl+F)")
         self.search.setObjectName("globalSearch")
+        self.search.setMinimumHeight(36)
         self.search.textChanged.connect(self.refresh)
         toolbar.addWidget(self.search, 2)
 
@@ -50,27 +58,62 @@ class TodayPage(BasePage):
 
         new_btn = QPushButton("+ New Task")
         new_btn.setObjectName("primaryBtn")
+        new_btn.setMinimumHeight(36)
         new_btn.clicked.connect(self.new_task)
         toolbar.addWidget(new_btn)
         self.layout_main.addLayout(toolbar)
 
-        actions = QHBoxLayout()
-        for label, slot in (
-            ("Duplicate", self._dup),
-            ("Archive", self._archive),
-            ("Delete", self._delete),
-            ("Favorite", self._fav),
-        ):
-            b = QPushButton(label)
-            b.clicked.connect(slot)
-            actions.addWidget(b)
-        actions.addStretch()
-        self.selection_label = QLabel("Click a task to select")
-        self.selection_label.setObjectName("muted")
-        actions.addWidget(self.selection_label)
+        # Selection banner — always visible so user knows the target of actions
+        self.selection_banner = QFrame()
+        banner_lay = QHBoxLayout(self.selection_banner)
+        banner_lay.setContentsMargins(14, 10, 14, 10)
+        banner_lay.setSpacing(12)
+        self.selection_dot = QLabel("")
+        self.selection_dot.setFixedSize(10, 10)
+        self.selection_label = QLabel("No task selected — click a row to select")
+        self.selection_label.setWordWrap(True)
         self.count_label = QLabel()
         self.count_label.setObjectName("muted")
-        actions.addWidget(self.count_label)
+        banner_lay.addWidget(self.selection_dot)
+        banner_lay.addWidget(self.selection_label, 1)
+        banner_lay.addWidget(self.count_label)
+        self._style_banner(active=False)
+        self.layout_main.addWidget(self.selection_banner)
+
+        # Action toolbar
+        actions = QHBoxLayout()
+        actions.setSpacing(8)
+        self.btn_edit = QPushButton("Edit")
+        self.btn_dup = QPushButton("Duplicate")
+        self.btn_fav = QPushButton("Favorite")
+        self.btn_focus = QPushButton("Start Focus")
+        self.btn_focus.setObjectName("primaryBtn")
+        self.btn_archive = QPushButton("Archive")
+        self.btn_delete = QPushButton("Delete")
+        self.btn_delete.setObjectName("dangerBtn")
+
+        self.btn_edit.clicked.connect(self._edit_selected)
+        self.btn_dup.clicked.connect(self._dup)
+        self.btn_fav.clicked.connect(self._fav)
+        self.btn_focus.clicked.connect(self._focus_selected)
+        self.btn_archive.clicked.connect(self._archive)
+        self.btn_delete.clicked.connect(self._delete)
+
+        for b in (
+            self.btn_edit,
+            self.btn_dup,
+            self.btn_fav,
+            self.btn_focus,
+            self.btn_archive,
+            self.btn_delete,
+        ):
+            b.setMinimumHeight(34)
+            b.setEnabled(False)
+            actions.addWidget(b)
+        actions.addStretch()
+        hint = QLabel("Tip: click the checkbox to complete · double-click row to edit")
+        hint.setObjectName("muted")
+        actions.addWidget(hint)
         self.layout_main.addLayout(actions)
 
         card = GlassCard(self.theme)
@@ -81,6 +124,44 @@ class TodayPage(BasePage):
         self.list.selected.connect(self._on_selected)
         card.body.addWidget(self.list)
         self.layout_main.addWidget(card, 1)
+
+    def _style_banner(self, *, active: bool) -> None:
+        t = self.theme
+        if active:
+            self.selection_banner.setStyleSheet(
+                f"QFrame {{ background: {t.accent_dim}; border: 1px solid {t.accent}; "
+                f"border-radius: 12px; }}"
+            )
+            self.selection_dot.setStyleSheet(
+                f"background: {t.accent}; border-radius: 5px; border: none;"
+            )
+            self.selection_label.setStyleSheet(
+                f"color: {t.text_primary}; font-weight: 650; font-size: 10.5pt; "
+                "background: transparent; border: none;"
+            )
+        else:
+            self.selection_banner.setStyleSheet(
+                f"QFrame {{ background: {t.bg_tertiary}; border: 1px solid {t.border}; "
+                f"border-radius: 12px; }}"
+            )
+            self.selection_dot.setStyleSheet(
+                f"background: {t.text_muted}; border-radius: 5px; border: none;"
+            )
+            self.selection_label.setStyleSheet(
+                f"color: {t.text_muted}; font-weight: 500; font-size: 10pt; "
+                "background: transparent; border: none;"
+            )
+
+    def _set_actions_enabled(self, enabled: bool) -> None:
+        for b in (
+            self.btn_edit,
+            self.btn_dup,
+            self.btn_fav,
+            self.btn_focus,
+            self.btn_archive,
+            self.btn_delete,
+        ):
+            b.setEnabled(enabled)
 
     def refresh(self) -> None:
         q = self.search.text().strip()
@@ -111,26 +192,46 @@ class TodayPage(BasePage):
 
         self.list.set_selected(self._selected)
         self.list.set_tasks(tasks)
-        self.count_label.setText(f"{len(tasks)} tasks")
-        self._update_selection_label()
+        done = sum(1 for t in tasks if t.completed)
+        self.count_label.setText(f"{done}/{len(tasks)} done")
+        self._update_selection_ui()
 
     def _on_selected(self, task_id: str) -> None:
         self._selected = task_id
-        self._update_selection_label()
+        self._update_selection_ui()
 
-    def _update_selection_label(self) -> None:
-        if not self._selected:
-            self.selection_label.setText("Click a task to select")
+    def _update_selection_ui(self) -> None:
+        task = self.ctx.tasks.get(self._selected) if self._selected else None
+        if not task:
+            self._selected = None
+            self._style_banner(active=False)
+            self.selection_label.setText("No task selected — click a row to select")
+            self._set_actions_enabled(False)
             return
-        task = self.ctx.tasks.get(self._selected)
-        name = task.title if task else self._selected
-        self.selection_label.setText(f"Selected: {name}")
+
+        self._style_banner(active=True)
+        status = "completed" if task.completed else task.status.replace("_", " ")
+        extras = []
+        if task.priority:
+            extras.append(task.priority)
+        if task.estimate_summary():
+            extras.append(task.estimate_summary())
+        extra = f"  ·  {' · '.join(extras)}" if extras else ""
+        self.selection_label.setText(
+            f"Selected:  {task.title}    ({status}{extra})"
+        )
+        self._set_actions_enabled(True)
+        self.btn_fav.setText("Unfavorite" if task.favorite else "Favorite")
+        self.list.set_selected(self._selected)
 
     def _require_selection(self) -> str | None:
         if self._selected and self.ctx.tasks.get(self._selected):
             return self._selected
         QMessageBox.information(
-            self, "No selection", "Click a task first, then use Duplicate / Archive / Delete."
+            self,
+            "No selection",
+            "Click a task row first so it shows the SELECTED badge,\n"
+            "then use Edit / Delete / Archive / Focus.",
         )
         return None
 
@@ -150,6 +251,7 @@ class TodayPage(BasePage):
         if not task:
             return
         self._selected = task_id
+        self._update_selection_ui()
         projects = [(p.id, p.name) for p in self.ctx.projects.projects]
         dlg = TaskDialog(self.theme, task=task, projects=projects, parent=self)
         if dlg.exec():
@@ -157,9 +259,22 @@ class TodayPage(BasePage):
             self.ctx.projects.refresh_counts()
             self.ctx.emit_change("tasks")
 
+    def _edit_selected(self) -> None:
+        tid = self._require_selection()
+        if tid:
+            self.edit_task(tid)
+
+    def _focus_selected(self) -> None:
+        tid = self._require_selection()
+        if tid:
+            self.ctx.start_task_focus(tid, navigate=True)
+
     def _toggle(self, task_id: str, checked: bool) -> None:
         task = self.ctx.tasks.get(task_id)
-        if task and checked != task.completed:
+        if not task:
+            return
+        self._selected = task_id
+        if checked != task.completed:
             self.ctx.tasks.toggle_complete(task_id)
             if checked:
                 self.ctx.stats.record_task_completed(task.category)
@@ -168,8 +283,11 @@ class TodayPage(BasePage):
                 )
             self.ctx.projects.refresh_counts()
             self.ctx.emit_change("tasks")
+        else:
+            self._update_selection_ui()
 
     def _timer(self, task_id: str) -> None:
+        self._selected = task_id
         self.ctx.start_task_focus(task_id, navigate=True)
 
     def _dup(self) -> None:
@@ -182,7 +300,14 @@ class TodayPage(BasePage):
 
     def _archive(self) -> None:
         tid = self._require_selection()
-        if tid:
+        if not tid:
+            return
+        task = self.ctx.tasks.get(tid)
+        name = task.title if task else "this task"
+        if (
+            QMessageBox.question(self, "Archive", f"Archive “{name}”?")
+            == QMessageBox.StandardButton.Yes
+        ):
             self.ctx.tasks.archive(tid)
             self._selected = None
             self.ctx.emit_change("tasks")
@@ -191,8 +316,10 @@ class TodayPage(BasePage):
         tid = self._require_selection()
         if not tid:
             return
+        task = self.ctx.tasks.get(tid)
+        name = task.title if task else "this task"
         if (
-            QMessageBox.question(self, "Delete", "Delete the selected task?")
+            QMessageBox.question(self, "Delete", f"Permanently delete “{name}”?")
             == QMessageBox.StandardButton.Yes
         ):
             self.ctx.tasks.delete(tid)

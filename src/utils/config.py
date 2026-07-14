@@ -37,20 +37,29 @@ ANIMATION_DURATION_MS: Final[int] = 220
 # Default accent (teal — avoiding purple bias)
 DEFAULT_ACCENT: Final[str] = "#2DD4BF"
 
-# Navigation pages (order = sidebar order)
+# Navigation — flat list (shortcuts) + grouped sidebar sections
 NAV_PAGES: Final[tuple[tuple[str, str, str], ...]] = (
-    ("dashboard", "Dashboard", "dashboard"),
-    ("today", "Today's Tasks", "today"),
-    ("projects", "Projects", "projects"),
-    ("habits", "Habits", "habits"),
-    ("calendar", "Calendar", "calendar"),
-    ("pomodoro", "Pomodoro", "pomodoro"),
-    ("notes", "Notes", "notes"),
-    ("statistics", "Statistics", "statistics"),
-    ("history", "History", "history"),
-    ("extras", "Extras", "extras"),
-    ("settings", "Settings", "settings"),
+    ("dashboard", "Dashboard", "DB"),
+    ("today", "Today's Tasks", "TD"),
+    ("projects", "Projects", "PR"),
+    ("habits", "Habits & Daily", "HB"),
+    ("calendar", "Calendar", "CA"),
+    ("pomodoro", "Pomodoro", "PM"),
+    ("notes", "Notes", "NT"),
+    ("statistics", "Statistics", "ST"),
+    ("history", "History", "HI"),
+    ("settings", "Settings", "SF"),
 )
+
+NAV_SECTIONS: Final[tuple[tuple[str, tuple[str, ...]], ...]] = (
+    ("Overview", ("dashboard", "today")),
+    ("Work", ("projects", "calendar", "pomodoro")),
+    ("Track", ("habits", "notes", "statistics")),
+    ("System", ("history", "settings")),
+)
+
+NAV_LABELS: Final[dict[str, str]] = {pid: title for pid, title, _ in NAV_PAGES}
+NAV_ICONS: Final[dict[str, str]] = {pid: icon for pid, _, icon in NAV_PAGES}
 
 TASK_STATUSES: Final[tuple[str, ...]] = (
     "not_started",

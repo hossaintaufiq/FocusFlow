@@ -2,6 +2,834 @@
   "version": 1,
   "entries": [
     {
+      "id": "hist_4d9329947a31",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "task_ab714b1af631",
+      "summary": "Stopped task (345s)",
+      "details": {},
+      "timestamp": "2026-07-14T06:47:38Z"
+    },
+    {
+      "id": "hist_95bf7757c913",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T06:47:05Z"
+    },
+    {
+      "id": "hist_ebad0e3cadbe",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T06:46:57Z"
+    },
+    {
+      "id": "hist_0d97e5f0a5c2",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:43:14Z"
+    },
+    {
+      "id": "hist_b1f9e848af73",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:43:14Z"
+    },
+    {
+      "id": "hist_fc920434414d",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:43:14Z"
+    },
+    {
+      "id": "hist_9be8799ef7f2",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:43:14Z"
+    },
+    {
+      "id": "hist_2907eabe2409",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:43:14Z"
+    },
+    {
+      "id": "hist_de7735433ed5",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:43:13Z"
+    },
+    {
+      "id": "hist_3c3312401909",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:43:13Z"
+    },
+    {
+      "id": "hist_ab0c9ef7a79d",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:43:13Z"
+    },
+    {
+      "id": "hist_f30d40d3f913",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:43:13Z"
+    },
+    {
+      "id": "hist_d5ab95ca35c3",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:43:13Z"
+    },
+    {
+      "id": "hist_4819935871a2",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:43:12Z"
+    },
+    {
+      "id": "hist_d1c9cb24650c",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:35Z"
+    },
+    {
+      "id": "hist_7abd10058da5",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:35Z"
+    },
+    {
+      "id": "hist_af4738e1f08b",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:35Z"
+    },
+    {
+      "id": "hist_0cbf55bdae0d",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:35Z"
+    },
+    {
+      "id": "hist_fb5e8e4494c3",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:35Z"
+    },
+    {
+      "id": "hist_97faf53526be",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:35Z"
+    },
+    {
+      "id": "hist_5690ce7caa86",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:35Z"
+    },
+    {
+      "id": "hist_2cdefc178210",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:34Z"
+    },
+    {
+      "id": "hist_8d2787ef91da",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:34Z"
+    },
+    {
+      "id": "hist_5f0aa1c94b98",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:34Z"
+    },
+    {
+      "id": "hist_a91b2b851248",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:34Z"
+    },
+    {
+      "id": "hist_08d4f8bdec2a",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:34Z"
+    },
+    {
+      "id": "hist_15f8e446caec",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:34Z"
+    },
+    {
+      "id": "hist_2c39df57ba73",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:33Z"
+    },
+    {
+      "id": "hist_d5c5e8b6beff",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:33Z"
+    },
+    {
+      "id": "hist_1ff5afa32d71",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:17Z"
+    },
+    {
+      "id": "hist_d58c5754b429",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:17Z"
+    },
+    {
+      "id": "hist_668b45d311c8",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:17Z"
+    },
+    {
+      "id": "hist_edb4364c3b3e",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:17Z"
+    },
+    {
+      "id": "hist_e5d6c4cf6654",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:42:16Z"
+    },
+    {
+      "id": "hist_d7390c94f97a",
+      "action": "task_completed",
+      "entity_type": "task",
+      "entity_id": "task_ab714b1af631",
+      "summary": "Completed: CRUD",
+      "details": {},
+      "timestamp": "2026-07-14T06:41:49Z"
+    },
+    {
+      "id": "hist_21bc9859027c",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "task_ab714b1af631",
+      "summary": "Started task focus (300 min slice)",
+      "details": {},
+      "timestamp": "2026-07-14T06:41:43Z"
+    },
+    {
+      "id": "hist_4bf943f43d31",
+      "action": "task_edited",
+      "entity_type": "task",
+      "entity_id": "task_ab714b1af631",
+      "summary": "Edited task: CRUD",
+      "details": {},
+      "timestamp": "2026-07-14T06:41:43Z"
+    },
+    {
+      "id": "hist_aa6a7c7d9c96",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T06:41:29Z"
+    },
+    {
+      "id": "hist_9b922824f6c4",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T06:41:23Z"
+    },
+    {
+      "id": "hist_af94efa2b79a",
+      "action": "task_edited",
+      "entity_type": "task",
+      "entity_id": "task_c3de4ec37296",
+      "summary": "Edited task: ML-Algo",
+      "details": {},
+      "timestamp": "2026-07-14T06:37:33Z"
+    },
+    {
+      "id": "hist_7f7362f76835",
+      "action": "task_duplicated",
+      "entity_type": "task",
+      "entity_id": "task_481ecd66bda2",
+      "summary": "Duplicated task: ML-Algo (copy)",
+      "details": {},
+      "timestamp": "2026-07-14T06:37:29Z"
+    },
+    {
+      "id": "hist_d6657542795b",
+      "action": "task_archived",
+      "entity_type": "task",
+      "entity_id": "task_c3de4ec37296",
+      "summary": "Archived task: ML-Algo",
+      "details": {},
+      "timestamp": "2026-07-14T06:37:28Z"
+    },
+    {
+      "id": "hist_844c81e2910e",
+      "action": "task_edited",
+      "entity_type": "task",
+      "entity_id": "task_c3de4ec37296",
+      "summary": "Edited task: ML-Algo",
+      "details": {},
+      "timestamp": "2026-07-14T06:37:28Z"
+    },
+    {
+      "id": "hist_a4314f95a206",
+      "action": "task_archived",
+      "entity_type": "task",
+      "entity_id": "task_c3de4ec37296",
+      "summary": "Archived task: ML-Algo",
+      "details": {},
+      "timestamp": "2026-07-14T06:37:23Z"
+    },
+    {
+      "id": "hist_7eea6b2a6862",
+      "action": "task_edited",
+      "entity_type": "task",
+      "entity_id": "task_c3de4ec37296",
+      "summary": "Edited task: ML-Algo",
+      "details": {},
+      "timestamp": "2026-07-14T06:37:23Z"
+    },
+    {
+      "id": "hist_9dfb59b3c7cf",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "task_ab714b1af631",
+      "summary": "Stopped task (152s)",
+      "details": {},
+      "timestamp": "2026-07-14T06:36:08Z"
+    },
+    {
+      "id": "hist_0fc994995c21",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:52Z"
+    },
+    {
+      "id": "hist_5524ea87bbb6",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:52Z"
+    },
+    {
+      "id": "hist_719a2079e9d6",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:52Z"
+    },
+    {
+      "id": "hist_81aaef5b0ed3",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:52Z"
+    },
+    {
+      "id": "hist_7aa3c890cc22",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:42Z"
+    },
+    {
+      "id": "hist_ff248d8b0e1b",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:42Z"
+    },
+    {
+      "id": "hist_92a9ad95c687",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:41Z"
+    },
+    {
+      "id": "hist_6d5f8bf6f031",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:41Z"
+    },
+    {
+      "id": "hist_936255bbef55",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:41Z"
+    },
+    {
+      "id": "hist_8780cd6c75a1",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:41Z"
+    },
+    {
+      "id": "hist_709d55c31af3",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:41Z"
+    },
+    {
+      "id": "hist_cf3b4de9d5ce",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:41Z"
+    },
+    {
+      "id": "hist_9097e9a8cf8a",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:41Z"
+    },
+    {
+      "id": "hist_76617ee83a33",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:40Z"
+    },
+    {
+      "id": "hist_1dd2e6587e4f",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:40Z"
+    },
+    {
+      "id": "hist_5b3276e4d9e0",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:40Z"
+    },
+    {
+      "id": "hist_2eb98e51fe50",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:40Z"
+    },
+    {
+      "id": "hist_86f658518d2b",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:40Z"
+    },
+    {
+      "id": "hist_30bdef7c12f4",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:40Z"
+    },
+    {
+      "id": "hist_cb4b966f3414",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:39Z"
+    },
+    {
+      "id": "hist_273e8749ee17",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:39Z"
+    },
+    {
+      "id": "hist_9c404dbcace5",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:39Z"
+    },
+    {
+      "id": "hist_2ff23e7aaada",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:39Z"
+    },
+    {
+      "id": "hist_9afac7fc58af",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:39Z"
+    },
+    {
+      "id": "hist_3805354958dd",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:38Z"
+    },
+    {
+      "id": "hist_f3b5a7eafbe3",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:38Z"
+    },
+    {
+      "id": "hist_9c68c07a6665",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:38Z"
+    },
+    {
+      "id": "hist_65da37ea9cc8",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:38Z"
+    },
+    {
+      "id": "hist_1591e1c49c7c",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:37Z"
+    },
+    {
+      "id": "hist_9295b4300930",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:37Z"
+    },
+    {
+      "id": "hist_952fd963d910",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:37Z"
+    },
+    {
+      "id": "hist_3d13c259f2ab",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:32Z"
+    },
+    {
+      "id": "hist_502814c66b1b",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:32Z"
+    },
+    {
+      "id": "hist_b0c29be34e07",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:28Z"
+    },
+    {
+      "id": "hist_b20c3dde4fa9",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:28Z"
+    },
+    {
+      "id": "hist_873dc83a8035",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:27Z"
+    },
+    {
+      "id": "hist_d3991c66d528",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:21Z"
+    },
+    {
+      "id": "hist_fdeef5b86022",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:21Z"
+    },
+    {
+      "id": "hist_d1a1dd75694b",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:21Z"
+    },
+    {
+      "id": "hist_d0fe8581e52d",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:21Z"
+    },
+    {
+      "id": "hist_59e0d57c2f4b",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:21Z"
+    },
+    {
+      "id": "hist_181a00c68215",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:21Z"
+    },
+    {
+      "id": "hist_8a9136f61460",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:19Z"
+    },
+    {
+      "id": "hist_dcd9e9a68174",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:19Z"
+    },
+    {
+      "id": "hist_fdd379f5e415",
+      "action": "settings_changed",
+      "entity_type": "settings",
+      "entity_id": "",
+      "summary": "Settings updated",
+      "details": {},
+      "timestamp": "2026-07-14T06:35:17Z"
+    },
+    {
+      "id": "hist_30e69ef4670f",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "task_ab714b1af631",
+      "summary": "Started task timer",
+      "details": {},
+      "timestamp": "2026-07-14T06:33:35Z"
+    },
+    {
       "id": "hist_cf628fa518be",
       "action": "timer_resumed",
       "entity_type": "timer",

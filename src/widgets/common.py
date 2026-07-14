@@ -143,8 +143,8 @@ class ProgressRing(QWidget):
         painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, f"{int(self._value)}%")
 
 
-class AnimatedCheckBox(QPushButton):
-    """Custom animated completion checkbox."""
+class AnimatedCheckBox(QWidget):
+    """Completion checkbox with a painted checkmark (reliable across fonts)."""
 
     toggled_custom = Signal(bool)
 
@@ -152,37 +152,60 @@ class AnimatedCheckBox(QPushButton):
         super().__init__(parent)
         self._theme = theme
         self._checked = checked
-        self.setFixedSize(24, 24)
+        self._hover = False
+        self.setFixedSize(26, 26)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setFlat(True)
-        self._update_style()
-        self.clicked.connect(self._toggle)
+        self.setToolTip("Mark complete / incomplete")
 
     def is_checked(self) -> bool:
         return self._checked
 
     def set_checked(self, checked: bool) -> None:
         self._checked = checked
-        self._update_style()
+        self.update()
 
-    def _toggle(self) -> None:
-        self._checked = not self._checked
-        self._update_style()
-        self.toggled_custom.emit(self._checked)
+    def enterEvent(self, event) -> None:  # noqa: N802
+        self._hover = True
+        self.update()
+        super().enterEvent(event)
 
-    def _update_style(self) -> None:
+    def leaveEvent(self, event) -> None:  # noqa: N802
+        self._hover = False
+        self.update()
+        super().leaveEvent(event)
+
+    def mousePressEvent(self, event) -> None:  # noqa: N802
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._checked = not self._checked
+            self.update()
+            self.toggled_custom.emit(self._checked)
+            event.accept()
+            return
+        super().mousePressEvent(event)
+
+    def paintEvent(self, event) -> None:  # noqa: N802
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        rect = self.rect().adjusted(1, 1, -1, -1)
+
         if self._checked:
-            self.setText("✓")
-            self.setStyleSheet(
-                f"QPushButton {{ background: {self._theme.accent}; color: #0B1220; "
-                f"border: none; border-radius: 7px; font-weight: 700; }}"
-            )
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(QColor(self._theme.accent))
+            painter.drawRoundedRect(rect, 7, 7)
+            # checkmark
+            pen = QPen(QColor("#0B1220"))
+            pen.setWidth(2)
+            pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+            pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
+            painter.setPen(pen)
+            painter.drawLine(7, 13, 11, 17)
+            painter.drawLine(11, 17, 19, 8)
         else:
-            self.setText("")
-            self.setStyleSheet(
-                f"QPushButton {{ background: {self._theme.bg_tertiary}; "
-                f"border: 2px solid {self._theme.border_strong}; border-radius: 7px; }}"
-            )
+            border = QColor(self._theme.accent if self._hover else self._theme.border_strong)
+            painter.setPen(QPen(border, 2))
+            painter.setBrush(QColor(self._theme.bg_elevated))
+            painter.drawRoundedRect(rect, 7, 7)
+        painter.end()
 
 
 class GradientBar(QWidget):
@@ -216,40 +239,110 @@ class GradientBar(QWidget):
             painter.drawRoundedRect(0, 0, w, self.height(), 5, 5)
 
 
-class SidebarButton(QPushButton):
-    """Navigation item in the sidebar."""
+class SidebarSectionLabel(QLabel):
+    """Uppercase section divider in the sidebar."""
+
+    def __init__(self, text: str, theme: ThemeColors, parent=None) -> None:
+        super().__init__(text.upper(), parent)
+        self.setStyleSheet(
+            f"color: {theme.text_muted}; font-size: 8pt; font-weight: 700; "
+            f"letter-spacing: 1.4px; padding: 14px 12px 6px 12px; "
+            "background: transparent; border: none;"
+        )
+
+
+class SidebarButton(QFrame):
+    """Navigation item with monogram badge and active accent strip."""
+
+    clicked = Signal()
 
     def __init__(
         self,
         page_id: str,
         label: str,
+        icon_text: str,
         theme: ThemeColors,
         parent=None,
     ) -> None:
-        super().__init__(label, parent)
+        super().__init__(parent)
         self.page_id = page_id
         self._theme = theme
-        self.setCheckable(True)
+        self._active = False
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setMinimumHeight(42)
+        self.setMinimumHeight(44)
+
+        lay = QHBoxLayout(self)
+        lay.setContentsMargins(10, 8, 12, 8)
+        lay.setSpacing(12)
+
+        self.badge = QLabel(icon_text)
+        self.badge.setFixedSize(32, 32)
+        self.badge.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        lay.addWidget(self.badge)
+
+        self.label = QLabel(label)
+        self.label.setStyleSheet("background: transparent; border: none;")
+        lay.addWidget(self.label, 1)
+
         self.set_active(False)
 
+    def mousePressEvent(self, event) -> None:  # noqa: N802
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.clicked.emit()
+            event.accept()
+            return
+        super().mousePressEvent(event)
+
     def set_active(self, active: bool) -> None:
-        self.setChecked(active)
+        self._active = active
         t = self._theme
         if active:
             self.setStyleSheet(
-                f"QPushButton {{ text-align: left; padding: 10px 16px; border: none; "
-                f"border-radius: 10px; background: {t.accent_dim}; color: {t.accent}; "
-                f"font-weight: 600; }}"
+                f"QFrame {{ border: none; border-left: 3px solid {t.accent}; "
+                f"border-top-right-radius: 10px; border-bottom-right-radius: 10px; "
+                f"background: {t.accent_dim}; }}"
+            )
+            self.badge.setStyleSheet(
+                f"background: {t.accent}; color: #0B1220; font-weight: 800; "
+                f"font-size: 8.5pt; border-radius: 8px; border: none;"
+            )
+            self.label.setStyleSheet(
+                f"color: {t.text_primary}; font-weight: 650; font-size: 10pt; "
+                "background: transparent; border: none;"
             )
         else:
             self.setStyleSheet(
-                f"QPushButton {{ text-align: left; padding: 10px 16px; border: none; "
-                f"border-radius: 10px; background: transparent; color: {t.text_secondary}; "
-                f"font-weight: 500; }}"
-                f"QPushButton:hover {{ background: rgba(148,163,184,0.08); color: {t.text_primary}; }}"
+                f"QFrame {{ border: none; border-left: 3px solid transparent; "
+                f"border-top-right-radius: 10px; border-bottom-right-radius: 10px; "
+                f"background: transparent; }}"
             )
+            self.badge.setStyleSheet(
+                f"background: {t.bg_tertiary}; color: {t.text_muted}; font-weight: 700; "
+                f"font-size: 8.5pt; border-radius: 8px; border: 1px solid {t.border};"
+            )
+            self.label.setStyleSheet(
+                f"color: {t.text_secondary}; font-weight: 500; font-size: 10pt; "
+                "background: transparent; border: none;"
+            )
+
+    def enterEvent(self, event) -> None:  # noqa: N802
+        if not self._active:
+            t = self._theme
+            self.setStyleSheet(
+                f"QFrame {{ border: none; border-left: 3px solid {t.border_strong}; "
+                f"border-top-right-radius: 10px; border-bottom-right-radius: 10px; "
+                f"background: rgba(148,163,184,0.08); }}"
+            )
+            self.label.setStyleSheet(
+                f"color: {t.text_primary}; font-weight: 500; font-size: 10pt; "
+                "background: transparent; border: none;"
+            )
+        super().enterEvent(event)
+
+    def leaveEvent(self, event) -> None:  # noqa: N802
+        if not self._active:
+            self.set_active(False)
+        super().leaveEvent(event)
 
 
 class PageHeader(QWidget):

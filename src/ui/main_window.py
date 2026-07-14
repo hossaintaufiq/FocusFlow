@@ -6,8 +6,8 @@ from __future__ import annotations
 
 import logging
 
-from PySide6.QtCore import QPropertyAnimation, Qt, QTimer
-from PySide6.QtGui import QAction, QKeySequence, QShortcut
+from PySide6.QtCore import Qt, QTimer
+from PySide6.QtGui import QKeySequence, QShortcut, QIcon
 from PySide6.QtWidgets import (
     QFrame,
     QHBoxLayout,
@@ -21,7 +21,6 @@ from PySide6.QtWidgets import (
 from src.services.app_context import AppContext
 from src.ui.pages.calendar_page import CalendarPage
 from src.ui.pages.dashboard_page import DashboardPage
-from src.ui.pages.extras_page import ExtrasPage
 from src.ui.pages.habits_page import HabitsPage
 from src.ui.pages.history_page import HistoryPage
 from src.ui.pages.notes_page import NotesPage
@@ -30,9 +29,18 @@ from src.ui.pages.projects_page import ProjectsPage
 from src.ui.pages.settings_page import SettingsPage
 from src.ui.pages.statistics_page import StatisticsPage
 from src.ui.pages.today_page import TodayPage
-from src.utils.config import APP_NAME, APP_TAGLINE, NAV_PAGES, SIDEBAR_WIDTH
+from src.utils.config import (
+    APP_NAME,
+    APP_TAGLINE,
+    NAV_ICONS,
+    NAV_LABELS,
+    NAV_PAGES,
+    NAV_SECTIONS,
+    SIDEBAR_WIDTH,
+)
+from src.utils.paths import APP_ICON
 from src.utils.theme import build_stylesheet
-from src.widgets.common import SidebarButton
+from src.widgets.common import SidebarButton, SidebarSectionLabel
 
 logger = logging.getLogger("FocusFlow.ui")
 
@@ -47,6 +55,8 @@ class MainWindow(QMainWindow):
         self.setStyleSheet(
             build_stylesheet(context.theme, context.settings.font_size)
         )
+        if APP_ICON.exists():
+            self.setWindowIcon(QIcon(str(APP_ICON)))
 
         root = QWidget()
         self.setCentralWidget(root)
@@ -59,50 +69,60 @@ class MainWindow(QMainWindow):
         self.sidebar.setObjectName("sidebar")
         self.sidebar.setFixedWidth(SIDEBAR_WIDTH)
         side_lay = QVBoxLayout(self.sidebar)
-        side_lay.setContentsMargins(14, 20, 14, 16)
-        side_lay.setSpacing(4)
+        side_lay.setContentsMargins(12, 20, 12, 16)
+        side_lay.setSpacing(2)
 
         brand = QLabel(APP_NAME)
         brand.setStyleSheet(
             f"font-size: 18pt; font-weight: 800; color: {context.theme.accent}; "
-            "letter-spacing: 0.5px; border: none; background: transparent;"
+            "letter-spacing: 0.5px; border: none; background: transparent; padding-left: 8px;"
         )
         tag = QLabel(APP_TAGLINE)
         tag.setStyleSheet(
-            f"color: {context.theme.text_muted}; font-size: 8pt; border: none; background: transparent;"
+            f"color: {context.theme.text_muted}; font-size: 8pt; border: none; "
+            "background: transparent; padding-left: 8px;"
         )
         side_lay.addWidget(brand)
         side_lay.addWidget(tag)
-        side_lay.addSpacing(18)
+        side_lay.addSpacing(16)
 
         self._nav_buttons: dict[str, SidebarButton] = {}
-        icons = {
-            "dashboard": "◈",
-            "today": "☑",
-            "projects": "▣",
-            "habits": "🔥",
-            "calendar": "☷",
-            "pomodoro": "⏱",
-            "notes": "✎",
-            "statistics": "▨",
-            "history": "↺",
-            "extras": "✦",
-            "settings": "⚙",
-        }
-        for page_id, title, _icon in NAV_PAGES:
-            btn = SidebarButton(
-                page_id, f"  {icons.get(page_id, '•')}   {title}", context.theme
-            )
-            btn.clicked.connect(lambda checked=False, p=page_id: self.navigate(p))
-            side_lay.addWidget(btn)
-            self._nav_buttons[page_id] = btn
+        for section_title, page_ids in NAV_SECTIONS:
+            side_lay.addWidget(SidebarSectionLabel(section_title, context.theme))
+            for page_id in page_ids:
+                btn = SidebarButton(
+                    page_id,
+                    NAV_LABELS[page_id],
+                    NAV_ICONS[page_id],
+                    context.theme,
+                )
+                btn.clicked.connect(lambda p=page_id: self.navigate(p))
+                side_lay.addWidget(btn)
+                self._nav_buttons[page_id] = btn
         side_lay.addStretch(1)
 
+        self.xp_card = QFrame()
+        self.xp_card.setObjectName("xpCard")
+        xp_lay = QVBoxLayout(self.xp_card)
+        xp_lay.setContentsMargins(14, 12, 14, 12)
+        xp_lay.setSpacing(4)
         self.level_label = QLabel()
         self.level_label.setStyleSheet(
-            f"color: {context.theme.text_muted}; font-size: 9pt; border: none;"
+            f"color: {context.theme.text_primary}; font-weight: 700; font-size: 10pt; "
+            "border: none; background: transparent;"
         )
-        side_lay.addWidget(self.level_label)
+        self.xp_detail = QLabel()
+        self.xp_detail.setStyleSheet(
+            f"color: {context.theme.text_muted}; font-size: 8.5pt; "
+            "border: none; background: transparent;"
+        )
+        xp_lay.addWidget(self.level_label)
+        xp_lay.addWidget(self.xp_detail)
+        self.xp_card.setStyleSheet(
+            f"QFrame#xpCard {{ background: {context.theme.bg_tertiary}; "
+            f"border: 1px solid {context.theme.border}; border-radius: 12px; }}"
+        )
+        side_lay.addWidget(self.xp_card)
         shell.addWidget(self.sidebar)
 
         # Content
@@ -136,7 +156,6 @@ class MainWindow(QMainWindow):
             NotesPage,
             StatisticsPage,
             HistoryPage,
-            ExtrasPage,
             SettingsPage,
         ]
         for cls in page_classes:
@@ -158,7 +177,6 @@ class MainWindow(QMainWindow):
         QShortcut(QKeySequence(Qt.Key.Key_Delete), self, activated=self._shortcut_delete)
         QShortcut(QKeySequence(Qt.Key.Key_Space), self, activated=self._shortcut_timer)
 
-        # Number keys for nav (Ctrl+1..9)
         for i, (page_id, _, _) in enumerate(NAV_PAGES[:9], start=1):
             QShortcut(
                 QKeySequence(f"Ctrl+{i}"),
@@ -189,7 +207,8 @@ class MainWindow(QMainWindow):
 
     def _refresh_level(self) -> None:
         store = self.ctx.achievements.store
-        self.level_label.setText(f"Lvl {store.level}  ·  {store.xp} XP")
+        self.level_label.setText(f"Level {store.level}")
+        self.xp_detail.setText(f"{store.xp:,} XP earned")
 
     def _shortcut_new_task(self) -> None:
         self.navigate("today")
@@ -210,10 +229,9 @@ class MainWindow(QMainWindow):
             page._delete()
 
     def _shortcut_timer(self) -> None:
-        # Avoid eating space while typing in inputs
         focus = self.focusWidget()
         if focus is not None:
-            from PySide6.QtWidgets import QLineEdit, QTextEdit, QPlainTextEdit
+            from PySide6.QtWidgets import QLineEdit, QPlainTextEdit, QTextEdit
 
             if isinstance(focus, (QLineEdit, QTextEdit, QPlainTextEdit)):
                 return

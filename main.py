@@ -13,11 +13,11 @@ ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from PySide6.QtGui import QFont, QFontDatabase
+from PySide6.QtGui import QFont, QFontDatabase, QIcon
 from PySide6.QtWidgets import QApplication
 
 from src.utils.logging_config import setup_logging
-from src.utils.paths import ensure_directories
+from src.utils.paths import APP_ICON, ensure_directories
 from src.services.app_context import AppContext
 from src.ui.main_window import MainWindow
 
@@ -30,6 +30,10 @@ def main() -> int:
     app.setApplicationName("FocusFlow")
     app.setOrganizationName("FocusFlow")
     app.setApplicationDisplayName("FocusFlow — Personal Productivity OS")
+
+    if APP_ICON.exists():
+        icon = QIcon(str(APP_ICON))
+        app.setWindowIcon(icon)
 
     # Prefer Segoe UI Variable / Inter-like system fonts on Windows
     font = QFont("Segoe UI", 10)
