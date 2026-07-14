@@ -547,15 +547,13 @@ Private / portfolio use — all rights reserved.
 
 ## Contact
 
-> **Replace this section with your details when sharing with recruiters.**
-
 | | |
 |---|---|
-| **Author** | *[Your Name]* |
-| **Email** | *[your.email@example.com]* |
-| **LinkedIn** | *[linkedin.com/in/yourprofile]* |
-| **GitHub** | *[github.com/yourusername]* |
-| **Repository** | *[Link to this repo]* |
+| **Author** | Hossain Ahmmed Taufiq
+| **Email** | hossainahmmedtaufiq22@gmail.com
+| **LinkedIn** | https://www.linkedin.com/in/hossain-ahmmed-129b29253/
+| **GitHub** | github.com/hossaintaufiq
+
 
 ---
 
