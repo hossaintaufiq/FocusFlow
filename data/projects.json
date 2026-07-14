@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "id": "proj_1e8cd7746c2e",
+      "name": "Personal",
+      "description": "",
+      "color": "#2DD4BF",
+      "icon": "folder",
+      "deadline": "",
+      "archived": false,
+      "favorite": false,
+      "created_at": "2026-07-13T19:20:04Z",
+      "updated_at": "2026-07-13T19:20:04Z",
+      "task_count": 2,
+      "completed_count": 0
+    }
+  ]
+}

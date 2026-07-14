@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "active_timer": {
+    "task_id": "",
+    "kind": "task",
+    "status": "idle",
+    "started_at": "",
+    "paused_at": "",
+    "planned_seconds": 1500,
+    "elapsed_seconds": 0,
+    "pomodoro_count": 0
+  },
+  "sessions": [
+    {
+      "id": "session_9531b93979a3",
+      "kind": "task",
+      "task_id": "task_76a387946f6b",
+      "started_at": "2026-07-14T06:10:47Z",
+      "ended_at": "2026-07-14T06:10:51Z",
+      "planned_seconds": 1500,
+      "elapsed_seconds": 3,
+      "completed": false,
+      "interrupted": true,
+      "notes": ""
+    }
+  ]
+}

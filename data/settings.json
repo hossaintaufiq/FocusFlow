@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "theme": "dark",
+  "accent_color": "#2DD4BF",
+  "font_size": 10,
+  "notifications_enabled": true,
+  "sound_enabled": true,
+  "launch_on_startup": false,
+  "auto_backup": true,
+  "focus_minutes": 17,
+  "short_break_minutes": 8,
+  "long_break_minutes": 27,
+  "long_break_interval": 4,
+  "morning_reminder": true,
+  "evening_summary": true,
+  "water_goal_ml": 2489,
+  "daily_quote_enabled": true,
+  "sidebar_collapsed": false,
+  "language": "en",
+  "extra": {}
+}

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "xp": 100,
+  "level": 1,
+  "badges": [
+    "first_task"
+  ],
+  "achievements": [
+    {
+      "id": "first_task",
+      "name": "Getting Started",
+      "description": "Complete your first task",
+      "unlocked_at": "2026-07-14T06:10:44Z",
+      "xp_reward": 50
+    }
+  ],
+  "unlocked_at": {
+    "first_task": "2026-07-14T06:10:44Z"
+  }
+}

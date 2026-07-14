@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "journal": [],
+  "mood": [],
+  "water": {
+    "2026-07-14": {
+      "date": "2026-07-14",
+      "ml": 0,
+      "goal_ml": 2500
+    }
+  },
+  "workout": [],
+  "reading": [],
+  "coding": [],
+  "leetcode": [],
+  "github": [],
+  "study": [],
+  "prayer": {
+    "2026-07-14": {
+      "date": "2026-07-14",
+      "items": {
+        "fajr": false,
+        "dhuhr": false,
+        "asr": false,
+        "maghrib": false,
+        "isha": false
+      }
+    }
+  },
+  "finance": [],
+  "scratchpad": "",
+  "sticky_notes": [],
+  "countdowns": []
+}
