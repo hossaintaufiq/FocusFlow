@@ -14,6 +14,8 @@ from src.services.storage import JsonStorage
 
 logger = logging.getLogger("FocusFlow.timer")
 
+FOCUS_KINDS = frozenset({"focus", "task", "custom"})
+
 
 class TimerService(QObject):
     tick = Signal(int)  # elapsed seconds
@@ -56,6 +58,25 @@ class TimerService(QObject):
         self._dirty = False
         self._ticks_since_save = 0
 
+    def has_suspended_focus(self) -> bool:
+        return bool(self.active.suspended_kind)
+
+    def _clear_suspended(self) -> None:
+        active = self.active
+        active.suspended_kind = ""
+        active.suspended_task_id = ""
+        active.suspended_planned_seconds = 0
+        active.suspended_elapsed_seconds = 0
+        active.suspended_started_at = ""
+
+    def _suspend_current_focus(self) -> None:
+        active = self.active
+        active.suspended_kind = active.kind
+        active.suspended_task_id = active.task_id
+        active.suspended_planned_seconds = active.planned_seconds
+        active.suspended_elapsed_seconds = active.elapsed_seconds
+        active.suspended_started_at = active.started_at
+
     def start(
         self,
         *,
@@ -63,9 +84,13 @@ class TimerService(QObject):
         planned_seconds: int = 25 * 60,
         task_id: str = "",
     ) -> ActiveTimer:
+        if kind in ("short_break", "long_break"):
+            return self.start_break(kind=kind, planned_seconds=planned_seconds)
+
         active = self.active
         if active.status in ("running", "paused") and active.elapsed_seconds > 0:
             self.stop()
+        self._clear_suspended()
         active = self.active
         active.kind = kind
         active.task_id = task_id if kind == "task" else ""
@@ -88,23 +113,93 @@ class TimerService(QObject):
         self.state_changed.emit("running")
         return active
 
+    def start_break(
+        self,
+        *,
+        kind: str,
+        planned_seconds: int,
+    ) -> ActiveTimer:
+        """Start a break and preserve any in-progress focus slice."""
+        active = self.active
+        if active.kind in FOCUS_KINDS and active.status in ("running", "paused"):
+            self._suspend_current_focus()
+        elif active.status in ("running", "paused") and active.elapsed_seconds > 0:
+            self.stop()
+
+        active = self.active
+        active.kind = kind
+        active.task_id = ""
+        active.planned_seconds = planned_seconds
+        active.elapsed_seconds = 0
+        active.status = "running"
+        active.started_at = utc_now_iso()
+        active.paused_at = ""
+        self._qtimer.start()
+        self.save()
+        self._history.log(
+            "timer_started",
+            entity_type="timer",
+            summary=f"Started {kind.replace('_', ' ')}",
+        )
+        self.state_changed.emit("running")
+        return active
+
+    def resume_suspended_focus(self) -> ActiveTimer | None:
+        """Restore a focus slice that was paused for a break."""
+        active = self.active
+        if not active.suspended_kind:
+            return None
+
+        if active.status in ("running", "paused"):
+            if active.kind in ("short_break", "long_break"):
+                self._qtimer.stop()
+            elif active.kind in FOCUS_KINDS:
+                return active
+
+        active.kind = active.suspended_kind
+        active.task_id = active.suspended_task_id
+        active.planned_seconds = active.suspended_planned_seconds
+        active.elapsed_seconds = active.suspended_elapsed_seconds
+        active.started_at = active.suspended_started_at or utc_now_iso()
+        active.status = "running"
+        active.paused_at = ""
+        self._clear_suspended()
+        self._qtimer.start()
+        self.save()
+        self._history.log(
+            "timer_resumed",
+            entity_type="timer",
+            entity_id=active.task_id,
+            summary="Resumed focus after break",
+        )
+        self.state_changed.emit("running")
+        return active
+
     def start_task_session(
         self,
         task_id: str,
         planned_seconds: int,
+        *,
+        fresh: bool = False,
     ) -> ActiveTimer:
         """Start a Pomodoro focus slice bound to a task."""
+        active = self.active
+        if (
+            not fresh
+            and active.suspended_kind == "task"
+            and active.suspended_task_id == task_id
+        ):
+            resumed = self.resume_suspended_focus()
+            if resumed is not None:
+                return resumed
         return self.start(kind="task", planned_seconds=planned_seconds, task_id=task_id)
 
     def restart_task_session(self, planned_seconds: int) -> ActiveTimer | None:
         """Start another focus slice for the already-linked task."""
-        if not self.active.task_id:
+        task_id = self.active.task_id or self.active.suspended_task_id
+        if not task_id:
             return None
-        return self.start(
-            kind="task",
-            planned_seconds=planned_seconds,
-            task_id=self.active.task_id,
-        )
+        return self.start_task_session(task_id, planned_seconds, fresh=True)
 
     def pause(self) -> ActiveTimer:
         active = self.active
@@ -146,7 +241,8 @@ class TimerService(QObject):
         task_id = active.task_id
         kind = active.kind
         elapsed = active.elapsed_seconds
-        self.reset(persist_session=False)
+        clear_suspended = kind in FOCUS_KINDS
+        self.reset(persist_session=False, clear_suspended=clear_suspended)
         self.save()
         self._history.log(
             "timer_stopped",
@@ -157,12 +253,20 @@ class TimerService(QObject):
         self.state_changed.emit("idle")
         return session
 
-    def reset(self, persist_session: bool = True, *, clear_task: bool = True) -> None:
+    def reset(
+        self,
+        persist_session: bool = True,
+        *,
+        clear_task: bool = True,
+        clear_suspended: bool = True,
+    ) -> None:
         active = self.active
         active.status = "idle"
         active.elapsed_seconds = 0
         active.started_at = ""
         active.paused_at = ""
+        if clear_suspended:
+            self._clear_suspended()
         if clear_task:
             active.task_id = ""
             active.kind = "focus"

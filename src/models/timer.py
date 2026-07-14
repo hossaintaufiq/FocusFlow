@@ -37,6 +37,12 @@ class ActiveTimer(JsonMixin):
     planned_seconds: int = 25 * 60
     elapsed_seconds: int = 0
     pomodoro_count: int = 0  # completed focus sessions in current cycle
+    # Focus slice preserved while a break is running
+    suspended_kind: str = ""
+    suspended_task_id: str = ""
+    suspended_planned_seconds: int = 0
+    suspended_elapsed_seconds: int = 0
+    suspended_started_at: str = ""
 
     def is_running(self) -> bool:
         return self.status == "running"

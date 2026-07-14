@@ -179,20 +179,44 @@ class DashboardPage(BasePage):
     def _refresh_timer(self) -> None:
         active = self.ctx.timers.active
         task = self.ctx.active_task()
-        if active.status == "idle" and not task:
+        suspended = active.suspended_kind == "task"
+        if active.status == "idle" and not task and not suspended:
             self.active_timer_label.setText("Idle")
             self.active_timer_meta.setText("No timer running")
         elif task:
-            rem_slice = self.ctx.timers.remaining_seconds()
-            if active.status == "idle":
+            if active.status in ("running", "paused") and active.kind in (
+                "short_break",
+                "long_break",
+            ):
+                rem_slice = self.ctx.timers.remaining_seconds()
+            elif suspended:
+                rem_slice = max(
+                    0,
+                    active.suspended_planned_seconds - active.suspended_elapsed_seconds,
+                )
+            else:
+                rem_slice = self.ctx.timers.remaining_seconds()
+            if active.status == "idle" and not suspended:
                 rem_slice = task.pomodoro_session_seconds(self.ctx.settings.focus_minutes)
-            live = active.elapsed_seconds if active.status in ("running", "paused") else 0
+            if active.status in ("running", "paused") and active.kind in (
+                "focus",
+                "task",
+                "custom",
+            ):
+                live = active.elapsed_seconds
+            elif suspended:
+                live = active.suspended_elapsed_seconds
+            else:
+                live = 0
             rem_task = task.remaining_budget_seconds(live)
             self.active_timer_label.setText(format_clock(rem_slice))
             lines = [f"{task.title} · slice {format_clock(rem_slice)}"]
             if task.has_time_budget():
                 lines.append(f"Task left: {format_clock(rem_task)}")
-            lines.append(f"{active.kind} · {active.status}")
+            if suspended and active.kind in ("short_break", "long_break"):
+                lines.append(f"on break · focus paused")
+            else:
+                lines.append(f"{active.kind} · {active.status}")
             self.active_timer_meta.setText(" · ".join(lines))
         else:
             rem = self.ctx.timers.remaining_seconds()

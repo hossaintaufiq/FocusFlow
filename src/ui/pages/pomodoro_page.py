@@ -17,6 +17,8 @@ from src.ui.pages.base_page import BasePage
 from src.utils.helpers import format_clock, format_duration
 from src.widgets.common import GlassCard, GradientBar, PageHeader, ProgressRing
 
+FOCUS_KINDS = frozenset({"focus", "task", "custom"})
+
 
 class PomodoroPage(BasePage):
     page_id = "pomodoro"
@@ -125,6 +127,10 @@ class PomodoroPage(BasePage):
         card = GlassCard(self.theme)
         card.body.addWidget(QLabel("Standard Pomodoro (no task)"))
         controls = QHBoxLayout()
+        self.resume_focus_btn = QPushButton("Resume Focus")
+        self.resume_focus_btn.setObjectName("primaryBtn")
+        self.resume_focus_btn.clicked.connect(self._resume_focus)
+        self.resume_focus_btn.hide()
         for text, slot, oid in (
             ("Start Focus", self._start_focus, "primaryBtn"),
             ("Short Break", self._short, ""),
@@ -138,6 +144,7 @@ class PomodoroPage(BasePage):
                 btn.setObjectName(oid)
             btn.clicked.connect(slot)
             controls.addWidget(btn)
+        controls.addWidget(self.resume_focus_btn)
         card.body.addLayout(controls)
         self.layout_main.addWidget(card)
 
@@ -172,6 +179,13 @@ class PomodoroPage(BasePage):
     def _resume(self) -> None:
         self.ctx.timers.resume()
         self.ctx.emit_change("timers")
+
+    def _resume_focus(self) -> None:
+        if self.ctx.timers.resume_suspended_focus():
+            self.ctx.emit_change("timers")
+            self.ctx.signals.toast.emit("Focus resumed")
+        else:
+            self.ctx.signals.toast.emit("No focus session to resume")
 
     def _stop(self) -> None:
         self.ctx.timers.stop()
@@ -213,7 +227,7 @@ class PomodoroPage(BasePage):
             self.ctx.signals.toast.emit("Select a task first")
             return
         secs = task.pomodoro_session_seconds(self.ctx.settings.focus_minutes)
-        self.ctx.timers.start_task_session(task.id, secs)
+        self.ctx.timers.start_task_session(task.id, secs, fresh=True)
         self.ctx.emit_change("timers")
 
     def _clear_task(self) -> None:
@@ -242,26 +256,64 @@ class PomodoroPage(BasePage):
         self._reload_task_picker()
         active = self.ctx.timers.active
         task = self.ctx.active_task()
+        suspended = active.suspended_kind == "task"
 
         # Session clock
         rem_session = self.ctx.timers.remaining_seconds()
-        if active.status == "idle" and active.elapsed_seconds == 0 and not task:
+        if active.status in ("running", "paused") and active.kind in (
+            "short_break",
+            "long_break",
+        ):
+            rem_session = self.ctx.timers.remaining_seconds()
+        elif suspended and task:
+            rem_session = max(
+                0,
+                active.suspended_planned_seconds - active.suspended_elapsed_seconds,
+            )
+        elif active.status == "idle" and active.elapsed_seconds == 0 and not task:
             rem_session = self.ctx.settings.focus_minutes * 60
         elif active.status == "idle" and task and active.kind == "task":
             rem_session = task.pomodoro_session_seconds(self.ctx.settings.focus_minutes)
         self.session_clock.setText(format_clock(rem_session))
-        planned_slice = max(1, active.planned_seconds if active.status != "idle" else rem_session)
-        if active.status in ("running", "paused"):
+
+        if active.status in ("running", "paused") and active.kind in FOCUS_KINDS:
+            planned_slice = max(1, active.planned_seconds)
             self.session_ring.set_value(100.0 * active.elapsed_seconds / planned_slice)
+        elif active.status in ("running", "paused") and active.kind in (
+            "short_break",
+            "long_break",
+        ):
+            planned_slice = max(1, active.planned_seconds)
+            self.session_ring.set_value(100.0 * active.elapsed_seconds / planned_slice)
+        elif suspended and task:
+            planned_slice = max(1, active.suspended_planned_seconds)
+            self.session_ring.set_value(
+                100.0 * active.suspended_elapsed_seconds / planned_slice
+            )
         else:
+            planned_slice = max(
+                1, active.planned_seconds if active.status != "idle" else rem_session
+            )
             self.session_ring.set_value(0)
+
+        if self.ctx.timers.has_suspended_focus() and (
+            active.kind in ("short_break", "long_break") or active.status == "idle"
+        ):
+            self.resume_focus_btn.show()
+        else:
+            self.resume_focus_btn.hide()
 
         # Task panel
         if task:
             self.task_card.show()
             self.task_title.setText(task.title)
             self.task_plan.setText(f"You planned: {task.planned_time_label()}")
-            live_extra = active.elapsed_seconds if active.status in ("running", "paused") else 0
+            if active.status in ("running", "paused") and active.kind in FOCUS_KINDS:
+                live_extra = active.elapsed_seconds
+            elif suspended:
+                live_extra = active.suspended_elapsed_seconds
+            else:
+                live_extra = 0
             remaining = task.remaining_budget_seconds(live_extra)
             budget = task.budget_seconds()
             spent = budget - remaining if budget else task.actual_seconds + live_extra
@@ -291,9 +343,31 @@ class PomodoroPage(BasePage):
                 self.mark_done_btn.setText("Mark task done")
 
             status = active.status
-            if active.kind == "task":
+            if suspended and active.kind in ("short_break", "long_break"):
+                paused_left = format_clock(
+                    max(
+                        0,
+                        active.suspended_planned_seconds
+                        - active.suspended_elapsed_seconds,
+                    )
+                )
+                self.mode_label.setText(
+                    f"On break · focus paused with {paused_left} left in slice"
+                )
+            elif active.kind == "task":
                 self.mode_label.setText(
                     f"Task focus · {status} · slice {format_clock(planned_slice)}"
+                )
+            elif suspended and active.status == "idle":
+                paused_left = format_clock(
+                    max(
+                        0,
+                        active.suspended_planned_seconds
+                        - active.suspended_elapsed_seconds,
+                    )
+                )
+                self.mode_label.setText(
+                    f"Focus paused · {paused_left} left in slice · tap Resume Focus"
                 )
             else:
                 self.mode_label.setText(f"Task linked · timer {status}")
@@ -319,7 +393,7 @@ class PomodoroPage(BasePage):
 
     def on_show(self) -> None:
         self.refresh()
-        tid = self.ctx.timers.active.task_id
+        tid = self.ctx.timers.active.task_id or self.ctx.timers.active.suspended_task_id
         if tid:
             idx = self.task_picker.findData(tid)
             if idx >= 0:

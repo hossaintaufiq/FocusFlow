@@ -2,6 +2,366 @@
   "version": 1,
   "entries": [
     {
+      "id": "hist_2c2d3b314776",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T09:08:38Z"
+    },
+    {
+      "id": "hist_07bb8d1cda82",
+      "action": "timer_resumed",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Resumed focus after break",
+      "details": {},
+      "timestamp": "2026-07-14T09:08:30Z"
+    },
+    {
+      "id": "hist_826eb078692e",
+      "action": "timer_resumed",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Resumed timer",
+      "details": {},
+      "timestamp": "2026-07-14T09:08:25Z"
+    },
+    {
+      "id": "hist_1b25a21f05e8",
+      "action": "timer_paused",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Paused timer",
+      "details": {},
+      "timestamp": "2026-07-14T09:08:24Z"
+    },
+    {
+      "id": "hist_8aab44f53d3c",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started long break",
+      "details": {},
+      "timestamp": "2026-07-14T09:08:22Z"
+    },
+    {
+      "id": "hist_886779248a38",
+      "action": "timer_resumed",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Resumed focus after break",
+      "details": {},
+      "timestamp": "2026-07-14T09:08:17Z"
+    },
+    {
+      "id": "hist_093e80490545",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started short break",
+      "details": {},
+      "timestamp": "2026-07-14T09:08:13Z"
+    },
+    {
+      "id": "hist_37a08a8c1f16",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Started task focus (180 min slice)",
+      "details": {},
+      "timestamp": "2026-07-14T09:07:49Z"
+    },
+    {
+      "id": "hist_28cc27bfc0cd",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T09:07:41Z"
+    },
+    {
+      "id": "hist_c18d4f70fd9b",
+      "action": "app_closed",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow closed",
+      "details": {},
+      "timestamp": "2026-07-14T09:00:49Z"
+    },
+    {
+      "id": "hist_65629541258b",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Stopped task (99s)",
+      "details": {},
+      "timestamp": "2026-07-14T09:00:47Z"
+    },
+    {
+      "id": "hist_e1363b999a3d",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Started task focus (180 min slice)",
+      "details": {},
+      "timestamp": "2026-07-14T08:59:07Z"
+    },
+    {
+      "id": "hist_7b0b8a59599f",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Stopped short_break (2s)",
+      "details": {},
+      "timestamp": "2026-07-14T08:59:07Z"
+    },
+    {
+      "id": "hist_eeab56e06086",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started short_break timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:59:05Z"
+    },
+    {
+      "id": "hist_ae50eb2be22c",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Stopped task (222s)",
+      "details": {},
+      "timestamp": "2026-07-14T08:59:05Z"
+    },
+    {
+      "id": "hist_f52087656802",
+      "action": "timer_paused",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Paused timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:59:01Z"
+    },
+    {
+      "id": "hist_fb2a9a6a12bc",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Started task focus (180 min slice)",
+      "details": {},
+      "timestamp": "2026-07-14T08:55:17Z"
+    },
+    {
+      "id": "hist_a0ba3d54d8c7",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Stopped focus (3s)",
+      "details": {},
+      "timestamp": "2026-07-14T08:55:17Z"
+    },
+    {
+      "id": "hist_4b59f1298100",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started focus timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:55:14Z"
+    },
+    {
+      "id": "hist_1dc38a00fc01",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started short_break timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:55:14Z"
+    },
+    {
+      "id": "hist_d5557e160ad3",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Stopped long_break (1s)",
+      "details": {},
+      "timestamp": "2026-07-14T08:55:13Z"
+    },
+    {
+      "id": "hist_ee3b02d5924b",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started long_break timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:55:12Z"
+    },
+    {
+      "id": "hist_a7647fe01bde",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Stopped short_break (1s)",
+      "details": {},
+      "timestamp": "2026-07-14T08:55:12Z"
+    },
+    {
+      "id": "hist_41623f2518f3",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started short_break timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:55:10Z"
+    },
+    {
+      "id": "hist_a3d3d101592e",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Stopped task (12s)",
+      "details": {},
+      "timestamp": "2026-07-14T08:55:10Z"
+    },
+    {
+      "id": "hist_073f375368b2",
+      "action": "timer_paused",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Paused timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:55:05Z"
+    },
+    {
+      "id": "hist_731df5c73a62",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Started task focus (180 min slice)",
+      "details": {},
+      "timestamp": "2026-07-14T08:54:53Z"
+    },
+    {
+      "id": "hist_3bce89900819",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Stopped short_break (9s)",
+      "details": {},
+      "timestamp": "2026-07-14T08:54:53Z"
+    },
+    {
+      "id": "hist_f58b9286a3eb",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started short_break timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:54:43Z"
+    },
+    {
+      "id": "hist_c7c39e62e510",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Stopped task (5s)",
+      "details": {},
+      "timestamp": "2026-07-14T08:54:43Z"
+    },
+    {
+      "id": "hist_d8821105f332",
+      "action": "timer_paused",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Paused timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:54:36Z"
+    },
+    {
+      "id": "hist_49767902c491",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Started task focus (180 min slice)",
+      "details": {},
+      "timestamp": "2026-07-14T08:54:30Z"
+    },
+    {
+      "id": "hist_3d5ad989e3bd",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Stopped focus (6s)",
+      "details": {},
+      "timestamp": "2026-07-14T08:53:14Z"
+    },
+    {
+      "id": "hist_908c5e4b7a96",
+      "action": "timer_paused",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Paused timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:53:13Z"
+    },
+    {
+      "id": "hist_594305575cf6",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started focus timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:53:06Z"
+    },
+    {
+      "id": "hist_650ecf24a06e",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Stopped short_break (12s)",
+      "details": {},
+      "timestamp": "2026-07-14T08:53:06Z"
+    },
+    {
+      "id": "hist_812d3217285f",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "",
+      "summary": "Started short_break timer",
+      "details": {},
+      "timestamp": "2026-07-14T08:52:54Z"
+    },
+    {
+      "id": "hist_a4dc78c90585",
+      "action": "timer_stopped",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Stopped task (9s)",
+      "details": {},
+      "timestamp": "2026-07-14T08:52:54Z"
+    },
+    {
+      "id": "hist_9f1c7b214dd2",
+      "action": "timer_started",
+      "entity_type": "timer",
+      "entity_id": "task_aa4ab175c5bf",
+      "summary": "Started task focus (180 min slice)",
+      "details": {},
+      "timestamp": "2026-07-14T08:52:44Z"
+    },
+    {
+      "id": "hist_8ee1acbb669b",
+      "action": "app_started",
+      "entity_type": "system",
+      "entity_id": "",
+      "summary": "FocusFlow started",
+      "details": {},
+      "timestamp": "2026-07-14T08:52:03Z"
+    },
+    {
       "id": "hist_9902c723ba6e",
       "action": "app_closed",
       "entity_type": "system",

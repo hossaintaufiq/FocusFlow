@@ -72,7 +72,8 @@ class AppContext:
 
     def active_task(self):
         """Task currently linked to the Pomodoro timer, if any."""
-        tid = self.timers.active.task_id
+        active = self.timers.active
+        tid = active.task_id or active.suspended_task_id
         return self.tasks.get(tid) if tid else None
 
     def start_task_focus(self, task_id: str, *, navigate: bool = True) -> bool:
@@ -89,9 +90,15 @@ class AppContext:
         if task.status == "not_started":
             self.tasks.update(task_id, status="in_progress")
 
+        was_suspended = (
+            self.timers.active.suspended_kind == "task"
+            and self.timers.active.suspended_task_id == task_id
+        )
         self.timers.start_task_session(task_id, seconds)
-        label = task.planned_time_label()
-        self.signals.toast.emit(f"Focus started: {task.title}")
+        if was_suspended:
+            self.signals.toast.emit(f"Focus resumed: {task.title}")
+        else:
+            self.signals.toast.emit(f"Focus started: {task.title}")
         self.emit_change("timers")
         if navigate:
             self.signals.navigate.emit("pomodoro")
@@ -99,7 +106,7 @@ class AppContext:
 
     def toggle_task_done(self, task_id: str | None = None) -> bool:
         """Mark linked task complete/incomplete without stopping the timer."""
-        tid = task_id or self.timers.active.task_id
+        tid = task_id or self.timers.active.task_id or self.timers.active.suspended_task_id
         if not tid:
             return False
         task = self.tasks.get(tid)
@@ -280,6 +287,12 @@ class AppContext:
                     )
             elif kind in ("short_break", "long_break"):
                 notifications.break_reminder()
+                if timers.has_suspended_focus():
+                    timers.resume_suspended_focus()
+                    notifications.notify(
+                        "Break over",
+                        "Resuming your focus session.",
+                    )
             signals.data_changed.emit("timers")
 
         timers.finished.connect(on_timer_finished)
